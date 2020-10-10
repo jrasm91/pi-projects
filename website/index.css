@@ -1,0 +1,18 @@
+#app {
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+#sidebar {
+  width: 250px;
+  min-height: 80vh;
+  border-right: 1px solid white;
+}
+
+#content {
+  min-height: 80vh;
+}
+
+.cursor {
+  cursor: pointer;
+}
