@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Zone } from '../../../../../common';
 import { APIService } from '../../api.service';
+import { Zone } from '../../models';
 
 @Component({
 	selector: 'pi-zones',

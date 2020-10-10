@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { filter, finalize, map, mergeMap } from 'rxjs/operators';
-import { Zone } from '../../../../../common';
 import { APIService } from '../../api.service';
 import { EditZoneModalComponent } from '../../modals/edit-zone-modal/edit-zone-modal.component';
+import { Zone } from '../../models';
 
 @Component({
 	selector: 'pi-zone-detail',

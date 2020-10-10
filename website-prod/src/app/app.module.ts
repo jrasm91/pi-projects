@@ -11,6 +11,7 @@ import { ToggleReadonlyComponent } from './components/toggle-readonly/toggle-rea
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeaderComponent } from './header/header.component';
 import { EditZoneModalComponent } from './modals/edit-zone-modal/edit-zone-modal.component';
+import { PoolComponent } from './pool/pool.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { TestComponent } from './test/test.component';
 import { ThemeModule } from './theme/theme.module';
@@ -26,6 +27,10 @@ const routes: Routes = [
 	{
 		path: 'dashboard',
 		component: DashboardComponent,
+	},
+	{
+		path: 'pool',
+		component: PoolComponent,
 	},
 	{
 		path: 'zones/:id/details',
@@ -87,7 +92,7 @@ const modals = [
 ];
 
 @NgModule({
-	declarations: [...components, ...modals],
+	declarations: [...components, ...modals, PoolComponent],
 	imports: [
 		HttpClientModule,
 		BrowserModule,

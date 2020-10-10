@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Zone } from '../../../../common';
 import { APIService } from '../api.service';
+import { Zone } from '../models';
 
 @Injectable()
 export class ZoneResolve implements Resolve<Zone> {

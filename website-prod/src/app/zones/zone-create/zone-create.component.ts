@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { Zone } from '../../../../../common';
 import { APIService } from '../../api.service';
+import { Zone } from '../../models';
 
 @Component({
 	selector: 'pi-zone-create',

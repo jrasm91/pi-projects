@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
-import { Zone } from '../../../../../common';
+import { Zone } from '../../models';
 
 @Component({
 	selector: 'pi-edit-zone-modal',

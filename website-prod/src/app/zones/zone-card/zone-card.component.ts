@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Zone } from '../../../../../common';
+import { Zone } from '../../models';
 
 @Component({
 	selector: 'pi-zone-card',

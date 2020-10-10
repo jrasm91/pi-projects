@@ -2,7 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Zone } from '../../../common';
+import { Zone } from './models';
+
+interface SensorResponse {
+	temperature: number;
+	date: Date;
+}
+
+const toDate = tap((response: SensorResponse) => response.date = new Date(response.date));
 
 @Injectable({ providedIn: 'root' })
 export class APIService {
@@ -43,6 +50,14 @@ export class APIService {
 	public deleteZone(zone: Zone) {
 		return this.http.delete(`/api/zones/${zone.id}`)
 			.pipe(tap(() => this.loadZones()));
+	}
+
+	public getPoolTemp() {
+		return this.http.get<SensorResponse>('/api/sensors/pool').pipe(toDate);
+	}
+
+	public getAirTemp() {
+		return this.http.get<SensorResponse>('/api/sensors/air').pipe(toDate);
 	}
 
 	public test(name: string) {

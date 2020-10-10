@@ -6,6 +6,12 @@ export const menu: NbMenuItem[] = [
 		icon: 'home',
 		link: '/dashboard',
 	},
+	{
+		title: 'Pool',
+		icon: 'swimming-pool',
+		link: '/pool',
+		pathMatch: 'prefix',
+	},
 	// {
 	// 	title: 'Usage',
 	// 	icon: 'faucet',

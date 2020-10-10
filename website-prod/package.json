@@ -1,20 +1,20 @@
 {
-  "name": "pi-sprinkler",
+  "name": "pi-projects-ui",
   "version": "0.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/njr97124/pi-sprinkler.git"
+    "url": "git+https://github.com/jrasm91/pi-projects.git"
   },
   "bugs": {
-    "url": "https://github.com/njr97124/pi-sprinkler/issues"
+    "url": "https://github.com/jrasm91/pi-projects/issues"
   },
   "scripts": {
     "analyze": "webpack-bundle-analyzer dist/stats-es2015.json",
     "ng": "ng",
     "conventional-changelog": "conventional-changelog",
     "start": "npm run start:dev",
-    "start:dev": "ng serve --proxy-config=proxy.json --aot --port 5001",
+    "start:dev": "ng serve --proxy-config=proxy.json --aot --port 4200",
     "build:dev": "ng build --prod --aot --stats-json",
     "build:prod": "ng build --prod --aot",
     "test": "ng test",
