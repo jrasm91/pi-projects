@@ -1,0 +1,79 @@
+<div>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a routerLink="/">Home</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<span>Test</span>
+			</li>
+		</ol>
+	</nav>
+</div>
+<h1 class="d-flex justify-content-between">
+	<span>Test</span>
+</h1>
+<hr>
+<div class="pi-overscroll">
+	<div class="row">
+		<div class="col-12 col-md-6 col-lg-4">
+			<h5 class="text-center">Group 1</h5>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test1')" status="success">Test 1</button>
+			</div>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test2')" status="success">Test 2</button>
+			</div>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test3')" status="success">Test 3</button>
+			</div>
+		</div>
+		<div class="col-12 col-md-6 col-lg-4">
+			<h5 class="text-center">Group 2</h5>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test4')" status="warning">Test 4</button>
+			</div>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test5')" status="warning">Test 5</button>
+			</div>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test6')" status="warning">Test 6</button>
+			</div>
+		</div>
+		<div class="col-12 col-md-6 col-lg-4">
+			<h5 class="text-center">Group 3</h5>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test7')" status="danger">Test 7</button>
+			</div>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test8')" status="danger">Test 8</button>
+			</div>
+			<div class="mt-2">
+				<button nbButton fullWidth (click)="execute('test9')" status="danger">Test 9</button>
+			</div>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col bg-">
+			<nb-card status="error? 'danger' : ''">
+				<nb-card-header>
+					<h6 class="d-flex justify-content-between">
+						<span>Response</span>
+						<div>
+							<button nbButton (click)="reset()">
+								<span class="fa fa-trash-alt mr-2"></span>
+								<span>Clear</span>
+							</button>
+						</div>
+					</h6>
+				</nb-card-header>
+				<nb-card-body>
+					<div *ngFor="let result of results">
+						<pre
+							[class.text-danger]="result.error">[{{ result.timestamp | date:'short' }}] {{ result.command }} ==> {{ result.message }}</pre>
+					</div>
+				</nb-card-body>
+			</nb-card>
+		</div>
+	</div>
+</div>

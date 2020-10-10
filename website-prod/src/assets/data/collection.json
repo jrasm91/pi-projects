@@ -1,0 +1,2542 @@
+{
+	"info": {
+		"_postman_id": "e12249bc-789b-435c-9f33-d795ac4cfaf6",
+		"name": "Pravici TLP API (Node)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Debug",
+			"item": [
+				{
+					"name": "Version",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/v1/version",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"version"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Context",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/v1/debug/context",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"debug",
+								"context"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Network",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/debug/context/network",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"debug",
+								"context",
+								"network"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Network Identities",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/debug/context/network/identities",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"debug",
+								"context",
+								"network",
+								"identities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/debug/transactions/:id?type=account",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"debug",
+								"transactions",
+								":id"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "loyalty",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "account",
+									"description": "Required, one of account|rate|loyalty"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "123",
+									"type": "string",
+									"description": "Transaction Id"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "A collection of troubleshooting endpoints. These help determine which account, network, and identity are being used during the request.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d7e041a6-f046-42df-8060-31fc1de0a2ff",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "73495407-9d3e-480b-a380-30a3c47f64aa",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"token\": \"{{FIREBASE_TOKEN}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/auth/login",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"token\": \"{{FIREBASE_TOKEN}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/auth/logout",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/user",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Account",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/user/account",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Account Points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/user/account/points/default",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"user",
+								"account",
+								"points",
+								"default"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Permissions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/user/permissions",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"user",
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Information about the current user, including account and permissions.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c0fe652d-2891-42e7-b493-7d92ca762140",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4ffabc57-8b66-40d7-97df-5bc36a1d06fe",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/users",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						},
+						"description": "Get all users."
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/users/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Get a user by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Bootstrap",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"accountId\": \"issuer\",\n\t\"accountType\": \"ISSUER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/users/:id/bootstrap",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								":id",
+								"bootstrap"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Firebase users collection.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7f4c4553-461e-4f37-aa3c-1864d7529aa9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3333376f-3144-4c19-9e37-a32741aa25f6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Networks",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Postman Test\",\n\t\"description\": \"Local Demo 0 - Test\",\n\t\"wallet\": {\n\t\t\"type\": \"couchdb\",\n\t\t\"url\": \"http://localhost:5984\",\n\t\t\"name\": \"wallet\"\n\t},\n\t\"blockchain\": {\n\t\t\"connection\": \"{\\\"name\\\":\\\"basic-network\\\",\\\"version\\\":\\\"1.0.0\\\",\\\"client\\\":{\\\"organization\\\":\\\"Org1\\\",\\\"connection\\\":{\\\"timeout\\\":{\\\"peer\\\":{\\\"endorser\\\":\\\"300\\\"},\\\"orderer\\\":\\\"300\\\"}}},\\\"channels\\\":{\\\"demo0general\\\":{\\\"orderers\\\":[\\\"orderer.example.com\\\"],\\\"peers\\\":{\\\"peer0.org1.example.com\\\":{}}},\\\"demo0issuer\\\":{\\\"orderers\\\":[\\\"orderer.example.com\\\"],\\\"peers\\\":{\\\"peer0.org1.example.com\\\":{}}}},\\\"organizations\\\":{\\\"Org1\\\":{\\\"mspid\\\":\\\"Org1MSP\\\",\\\"peers\\\":[\\\"peer0.org1.example.com\\\"],\\\"certificateAuthorities\\\":[\\\"ca.example.com\\\"]}},\\\"orderers\\\":{\\\"orderer.example.com\\\":{\\\"url\\\":\\\"grpc://localhost:7050\\\"}},\\\"peers\\\":{\\\"peer0.org1.example.com\\\":{\\\"url\\\":\\\"grpc://localhost:7051\\\"}},\\\"certificateAuthorities\\\":{\\\"ca.example.com\\\":{\\\"url\\\":\\\"http://localhost:7054\\\",\\\"caName\\\":\\\"ca.example.com\\\"}}}\"\n,\n\t\t\"chaincode\": {\n\t\t\t\"accounts\": \"tlp-accounts\",\n\t\t\t\"rates\": \"tlp-rates\",\n\t\t\t\"loyalty\": \"tlp-loyalty\"\n\t\t},\n\t\t\"channel\": {\n\t\t\t\"general\": \"demo0general\",\n\t\t\t\"issuer\": \"demo0issuer\"\n\t\t}\n\t},\n\t\"adminId\": \"admin\",\n\t\"enrollmentSecret\": \"adminpw\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/networks",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"networks"
+							]
+						},
+						"description": "Create a new network."
+					},
+					"response": []
+				},
+				{
+					"name": "Bootstrap",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"adminId\": \"admin\",\n\t\"enrollmentSecret\": \"adminpw\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/networks/:id/bootstrap",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"networks",
+								":id",
+								"bootstrap"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/networks",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"networks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/networks/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"networks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Network Id"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Firebase networks collection.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4ee020b5-197e-4ce4-a20e-a283d6af2abc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4d9f3551-b344-40bb-8c8c-e017478f5f41",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Keys",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Postman Integration #1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/keys",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"keys"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/keys",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"keys"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/keys/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"keys",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Firebase keys collection.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "84ace20d-e7fc-457f-a641-1db3021ee9ad",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e007ee0a-790b-4fdc-b50b-52006b7c70f8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Invites",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"My first invite\",\n\t\"accountId\": \"issuer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/invites",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"invites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept By Code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"inviteId\": \"LOCAL_DEMO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/invites/accept?type=code",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"invites",
+								"accept"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "code",
+									"description": "Lookup invite via (short) code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/invites?accountId=:accountId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"invites"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": ":accountId",
+									"description": "Search for invites with this accountId"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/invites/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"invites",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Code",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/invites/CuLUNrSLp?type=code",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"invites",
+								"CuLUNrSLp"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "code"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Firebase invites collection.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "521c1332-7c5d-45aa-890e-f366174162f2",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d5cde20-16f6-4ad7-b99e-1887b7f7b413",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Issuer",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/issuer",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"issuer"
+							]
+						},
+						"description": "Get the issuer account from the blockchain. There is only ever one issuer account, with an id of \"issuer\"."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/issuer/points/default",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"issuer",
+								"points",
+								"default"
+							]
+						},
+						"description": "Get the points section of the issuer account from the blockchain."
+					},
+					"response": []
+				}
+			],
+			"description": "Blockchain requests for account type ISSUER.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8ed15939-234a-4620-a369-3f066572daae",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "44591274-03b5-41eb-9bee-7cc47a4b5db6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Partner",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"attributes\": {\n\t\t\"test1\": \"test1\",\n\t\t\"test2\": \"test2\"\n\t},\n\t\"name\": \"Another Test Partner\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/partners",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"partners"
+							]
+						},
+						"description": "Create a new partner account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/partners",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"partners"
+							]
+						},
+						"description": "Get all accounts of type PARTNER."
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/partners/partner.4a06b7af-8513-467b-b49e-cf1fbe30d126",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"partners",
+								"partner.4a06b7af-8513-467b-b49e-cf1fbe30d126"
+							]
+						},
+						"description": "Get a partner account by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/partners/:id/points/:type",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"partners",
+								":id",
+								"points",
+								":type"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string",
+									"description": "Partner Id"
+								},
+								{
+									"key": "type",
+									"value": "",
+									"type": "string",
+									"description": "Point Type"
+								}
+							]
+						},
+						"description": "Get the points section of a partner account."
+					},
+					"response": []
+				}
+			],
+			"description": "Blockchain requests for account type PARTNER.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "86169cd6-8e1a-4c4e-948b-5dd76fdad80b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "f9eccab4-c2d0-45c2-bdf3-cc3351c14d45",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"attributes\": {\n\t\t\"test1\": \"test1\",\n\t\t\"test2\": \"test2\"\n\t},\n\t\"name\": \"Test Location\",\n\t\"partnerId\": \"partner.41756fbb-13b8-43da-b571-4e1fff26304b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/locations",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"locations"
+							]
+						},
+						"description": "Create a new account of type LOCATION."
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Partner Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/locations?partnerId=accountId",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"locations"
+							],
+							"query": [
+								{
+									"key": "partnerId",
+									"value": "accountId",
+									"description": "Parent partnerId"
+								}
+							]
+						},
+						"description": "Get location accounts for a partner."
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/locations/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"locations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string",
+									"description": "Location Id"
+								}
+							]
+						},
+						"description": "Get a location account by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/locations/:id/points/:type",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"locations",
+								":id",
+								"points",
+								":type"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "type",
+									"value": "default",
+									"type": "string",
+									"description": "Point Type"
+								}
+							]
+						},
+						"description": "Get the points section of a location account."
+					},
+					"response": []
+				}
+			],
+			"description": "Blockchain requests for account type LOCATION.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f9ffda5b-ec39-4b0d-bd0d-f4b9b026fb05",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fbbcc434-c5ed-44f7-9779-4c149fb4cc7d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Member",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"attributes\": {\n\t\t\"test1\": \"test1\",\n\t\t\"test2\": \"test2\"\n\t},\n\t\"name\": \"Test Member\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/members",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"members"
+							]
+						},
+						"description": "Create a new account of type MEMBER."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/members",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"members"
+							]
+						},
+						"description": "Get all members. Supports pagination."
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/members/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"members",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string",
+									"description": "Member Id"
+								}
+							]
+						},
+						"description": "Get a member account by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/members/:id/points/:type",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"members",
+								":id",
+								"points",
+								":type"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string",
+									"description": "Member Id"
+								},
+								{
+									"key": "type",
+									"value": "",
+									"type": "string",
+									"description": "Point type"
+								}
+							]
+						},
+						"description": "Get the points section of a member account."
+					},
+					"response": []
+				}
+			],
+			"description": "Blockchain requests for account type MEMBER.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "74ad3eff-eb57-4674-bac6-c46c6af18af4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b4f25fdc-9d26-4c11-9d71-18d844ed0d9e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Account: Get Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/accounts/issuer/users",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"accounts",
+								"issuer",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Get History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/points/default/history?accountId=issuer",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"points",
+								"default",
+								"history"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "issuer"
+								}
+							]
+						},
+						"description": "Get the history of an account."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{API_URL}}/v1/points/default/history?accountId=issuer",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"v1",
+										"points",
+										"default",
+										"history"
+									],
+									"query": [
+										{
+											"key": "accountId",
+											"value": "issuer"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "4438"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1156-JKsYd+XtX3UIwh4Gz7uOKLA38dk\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 15 May 2020 21:49:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"transactionId\": \"29b8510663aeb44a9c6b73d51a0b2c6933e18986a644d8c9605e002bc0a32a12\",\n        \"timestamp\": \"2020-05-15T21:18:07.000Z\",\n        \"type\": \"POINTS_SELL\",\n        \"data\": {\n            \"sourceId\": \"partner.5371ca60-bc6d-4338-aad1-a83ed9cdd1d5\",\n            \"targetId\": \"issuer\",\n            \"amount\": 5000,\n            \"confirmationId\": \"0208abda705f535e830d8042f42512769501c971b7ffdf7bd55e04d38321ea07\",\n            \"payload\": {}\n        }\n    },\n    {\n        \"transactionId\": \"1f4b324b9a25b0fedb3e4822f5322c6251274daa3f05d3419b9667ef3ed1f85a\",\n        \"timestamp\": \"2020-05-15T18:13:22.000Z\",\n        \"type\": \"POINTS_PULL\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"partner.5371ca60-bc6d-4338-aad1-a83ed9cdd1d5\",\n            \"targetId\": \"issuer\",\n            \"amount\": 2000,\n            \"payload\": {\n                \"description\": \"asdfasdfasdf\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"0afc870c914c442a20781c337dec622000bf38a3e6c0648daa636ab499cf01cf\",\n        \"timestamp\": \"2020-05-15T16:49:58.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"location.00cc5e83-56c2-4deb-8f0e-6277ba745744\",\n            \"amount\": 100000,\n            \"payload\": {\n                \"description\": \"asdfasdfasdf\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"6255156983ede76bed616145714ba664d5e3d943e30e4bdac69317868e73e134\",\n        \"timestamp\": \"2020-05-15T16:21:58.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"member.fa00e4a7-0c36-485c-8b89-fad02e968432\",\n            \"amount\": 10000,\n            \"payload\": {\n                \"description\": \"Sign-up bonus\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"507d4792e53a671c3e4c635f5e38083fbbfa9138046aa92ea96fb6bc70fca905\",\n        \"timestamp\": \"2020-05-15T16:21:56.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"member.15111f43-874f-43f0-8e5e-eab1cc5ad945\",\n            \"amount\": 10000,\n            \"payload\": {\n                \"description\": \"Sign-up bonus\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"a8faf7525e093dcd469fadd5494b8681bd20bf9d8c8028cfa24807b9906eee24\",\n        \"timestamp\": \"2020-05-15T16:21:54.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"member.66e18e32-4f2c-4a19-aed9-662d8a16b5d4\",\n            \"amount\": 10000,\n            \"payload\": {\n                \"description\": \"Sign-up bonus\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"4b9999ff85ed6cd5596c13dde2a2d8f23dff3a7d2c44c55cd6b14ec4f98ceaf2\",\n        \"timestamp\": \"2020-05-15T16:21:52.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"member.a3834d47-2683-4ff3-8fe6-b17145464a90\",\n            \"amount\": 10000,\n            \"payload\": {\n                \"description\": \"Sign-up bonus\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"4c46e268362fa16ca652519e672cc3570589374a4f70eab64119b5df65f6d319\",\n        \"timestamp\": \"2020-05-15T16:21:50.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"member.3ee4b1aa-77fa-421a-b0a8-882a73d83ba9\",\n            \"amount\": 5000,\n            \"payload\": {\n                \"description\": \"Sign-up bonus\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"7b58187fe472ca180e6287a0adddb369c6b161570e4ae30d857226fcf76ed2bc\",\n        \"timestamp\": \"2020-05-15T16:21:47.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"partner.5371ca60-bc6d-4338-aad1-a83ed9cdd1d5\",\n            \"amount\": 200000,\n            \"payload\": {\n                \"description\": \"via transactions.ts\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"1e76cad7330d8937527b6d71e5a41f89505c64bf15ac95f649aa3794248ccf7a\",\n        \"timestamp\": \"2020-05-15T16:21:45.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"partner.9a46e58b-534f-484c-9482-e94547385bcc\",\n            \"amount\": 200000,\n            \"payload\": {\n                \"description\": \"via transactions.ts\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"b48e25533544ac88db8760bb3e229ce6a46c2f6cfe6ea3d0e38309f802a86592\",\n        \"timestamp\": \"2020-05-15T16:21:43.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"partner.d49eb816-2274-46ba-8688-dec7f47c663d\",\n            \"amount\": 200000,\n            \"payload\": {\n                \"description\": \"via transactions.ts\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"6c8eb0f600f49c5378dfac62a64920e7057a194bf347592bb6d62c9d0f9cde26\",\n        \"timestamp\": \"2020-05-15T16:21:41.000Z\",\n        \"type\": \"POINTS_SEND\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"sourceId\": \"issuer\",\n            \"targetId\": \"partner.86fefdad-f071-431f-a862-02dec7278356\",\n            \"amount\": 200000,\n            \"payload\": {\n                \"description\": \"via transactions.ts\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"8ffa8e935d9d1c1d96a7323ccecb88cd233bd9f65488ec775764ccb3812a9a8a\",\n        \"timestamp\": \"2020-05-15T16:21:39.000Z\",\n        \"type\": \"POINTS_ISSUE\",\n        \"data\": {\n            \"pointType\": \"default\",\n            \"accountId\": \"issuer\",\n            \"amount\": 2000000,\n            \"payload\": {\n                \"description\": \"Issued by transactions script\"\n            }\n        }\n    },\n    {\n        \"transactionId\": \"3fc60f99ffa0f105a888952cfa4be89c04e4ab421447d67fe0381656159898e9\",\n        \"timestamp\": \"2020-05-15T16:21:15.000Z\",\n        \"type\": \"ACCOUNT_CREATE\",\n        \"data\": {\n            \"account\": {\n                \"attributes\": {},\n                \"id\": \"issuer\",\n                \"name\": \"Issuer\",\n                \"permissions\": {\n                    \"tlp.points.receive\": true,\n                    \"tlp.points.send\": true\n                },\n                \"points\": {\n                    \"default\": {\n                        \"balance\": 0,\n                        \"totalReceived\": 0,\n                        \"totalSent\": 0\n                    }\n                },\n                \"status\": \"OPEN\",\n                \"type\": \"ISSUER\"\n            }\n        }\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Pull Points",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountId\": \"partner.30bf920b-92c5-4130-8cd9-08569f8834cf\",\n    \"amount\": 1000,\n    \"payload\": {\n        \"description\": \"Pull points test\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/points/:type/pull",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"points",
+								":type",
+								"pull"
+							],
+							"variable": [
+								{
+									"key": "type",
+									"value": "default",
+									"type": "string",
+									"description": "Point type"
+								}
+							]
+						},
+						"description": "Pull points from a child account. Can be one of the following:\n1. Issuer pulls points from a Partner account.\n2. Issuer pulls points from a Member account.\n3. Partner pulls points from a Location account."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"accountId\": \"partner.30bf920b-92c5-4130-8cd9-08569f8834cf\",\n    \"amount\": 1000,\n    \"payload\": {\n        \"description\": \"Pulling points from a partner.\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}/v1/points/:type/pull",
+									"host": [
+										"{{API_URL}}"
+									],
+									"path": [
+										"v1",
+										"points",
+										":type",
+										"pull"
+									],
+									"variable": [
+										{
+											"description": "Point type",
+											"key": "type",
+											"type": "string",
+											"value": "default"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "287"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"11f-TpvHd3qjeQphKS2twiuVOhQZyyw\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 20 May 2020 15:35:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"type\": \"POINTS_PULL\",\n    \"data\": {\n        \"pointType\": \"default\",\n        \"sourceId\": \"partner.30bf920b-92c5-4130-8cd9-08569f8834cf\",\n        \"targetId\": \"issuer\",\n        \"amount\": 1000,\n        \"payload\": {\n            \"description\": \"Pulling points from a partner.\"\n        }\n    },\n    \"transactionId\": \"a966eea90fdf5bcc97539b9b1ace17aca37dc4a2bae3f943b55b79ea181662ba\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Issue Points",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"amount\": 50000,\n\t\"payload\": { \"description\": \"Jason gave you some points.\" }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/points/:type/issue",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"points",
+								":type",
+								"issue"
+							],
+							"variable": [
+								{
+									"key": "type",
+									"value": "",
+									"type": "string",
+									"description": "Point type"
+								}
+							]
+						},
+						"description": "Issue (mint) points. Only valid with the default point type."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Points",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_KEY}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"accountId\": \"member.4e891408-0818-4769-8f27-d79f51cf37e0\",\n\t\"amount\": 1000000,\n\t\"payload\": { \"message\": \"Send points test\" }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/points/:type/send",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"points",
+								":type",
+								"send"
+							],
+							"variable": [
+								{
+									"key": "type",
+									"value": "",
+									"description": "Point type"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell Points",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "E2A8sAXiQ3UZop23L3kB2Zs5olj2",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "Password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"amount\": 5000,\n\t\"payload\": { \"description\": \"Selling my points yo\" }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/points/:type/sell",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"points",
+								":type",
+								"sell"
+							],
+							"variable": [
+								{
+									"key": "type",
+									"value": "",
+									"description": "Point type"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints to move points between accounts on the blockchain.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ec56d1d1-7aed-4b77-bd92-b2ba8eec771a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2ff97113-727c-450b-9ee4-57bbe5f80bf6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Rates",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"partner.04ba3442-bf85-4932-9c3f-0647e6d7341c\",\n\t\"buy\": 1,\n\t\"sell\": \"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/rates",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"rates"
+							]
+						},
+						"description": "Update exchange rates for TLP points"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/rates",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"rates"
+							]
+						},
+						"description": "Update exchange rates for TLP points"
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/rates/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"rates",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Rate Id"
+								}
+							]
+						},
+						"description": "Update exchange rates for TLP points"
+					},
+					"response": []
+				},
+				{
+					"name": "Get History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/rates/:id/history",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"rates",
+								":id",
+								"history"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Rate Id"
+								}
+							]
+						},
+						"description": "Update exchange rates for TLP points"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for manage partner rates on the blockchain.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "79c609e6-d539-4723-bccd-c3a5dda4b1e1",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "397e4f8d-c56d-4537-ad9f-5ebdf445f742",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Offers",
+			"item": [
+				{
+					"name": "Create Redepmtion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"active\": true,\n\t\"type\": \"REDEMPTION\",\n\t\"subtype\": \"PRODUCT\",\n\t\"name\": \"Free Candy Bar\",\n\t\"description\": \"Get a free candy bar, yo!\",\n\t\"startDate\": \"2020-01-01\",\n\t\"endDate\": null,\n\t\"amount\": 5000,\n\t\"product\": {\n\t\t\"name\": \"Can of Soda\",\n\t\t\"description\": \"A free soda\",\n\t\t\"imageUrl\": \"https://cdn.pixabay.com/photo/2018/08/03/11/13/soda-3581645_960_720.jpg\"\n\t},\n\t\"options\": {\n\t\t\"location\": true,\n\t\t\"online\": false\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/offers",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"offers"
+							]
+						},
+						"description": "Create a new product offer of type REDEMPTION."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Accrual",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{USER_ID}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "Password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"active\": true,\n\t\"type\": \"ACCRUAL\",\n\t\"subtype\": \"PRODUCT\",\n\t\"name\": \"Earn points with the purchase of a candy bar\",\n\t\"description\": \"Who doesn't like free points?!\",\n\t\"startDate\": \"2020-01-01\",\n\t\"endDate\": null,\n\t\"amount\": 1000,\n\t\"product\": {\n\t\t\"name\": \"Candy Bar\",\n\t\t\"description\": \"A small candy bar\",\n\t\t\"imageUrl\": \"https://cdn.pixabay.com/photo/2019/07/06/06/06/chocolate-4319755_960_720.jpg\"\n\t},\n\t\"options\": {\n\t\t\"location\": true,\n\t\t\"online\": false\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/offers",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"offers"
+							]
+						},
+						"description": "Create a new product offer of type ACCRUAL."
+					},
+					"response": []
+				},
+				{
+					"name": "Accrue",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{LOCATION_ID}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "Password",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"accountId\": \"member.9435bf07-7bc8-4a25-bda6-4eafe54f1ae7\",\n\t\"method\": \"location\",\n\t\"payload\": { \"description\": \"Accrued a fancy offer!\" }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/offers/:id/accrue",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"offers",
+								":id",
+								"accrue"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string",
+									"description": "Offer Id"
+								}
+							]
+						},
+						"description": "Execute an accrual offer."
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "Password",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{MEMBER_ID}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"method\": \"location\",\n\t\"locationId\": \"location.396412b6-c117-4bd0-a0a8-ea943dbcf1cd\",\n\t\"payload\": { \"description\": \"Redeemed a fancy offer!\" }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/v1/offers/:id/redeem",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"offers",
+								":id",
+								"redeem"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string",
+									"description": "Offer Id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/offers?accountType=ISSUER|PARTNER&amountMax=10000&type=ACCRUAL|REDEMPTION",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"offers"
+							],
+							"query": [
+								{
+									"key": "bookmark",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "accountType",
+									"value": "ISSUER|PARTNER",
+									"description": "Search by account type"
+								},
+								{
+									"key": "amountMax",
+									"value": "10000"
+								},
+								{
+									"key": "type",
+									"value": "ACCRUAL|REDEMPTION",
+									"description": "Search by offer type"
+								}
+							]
+						},
+						"description": "Get all offers. Supports pagination and filtering."
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/v1/offers/:id",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"v1",
+								"offers",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "string",
+									"description": "Offer Id"
+								}
+							]
+						},
+						"description": "Get offer by id."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing offers on the blockchain.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e4c1bfdc-3b1d-4217-8206-005dabbad9d6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ee53abf7-3b99-43f0-8917-2fb31d12e9d0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "password",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{USER_ID}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "81ab48b2-c1d2-4ed1-8caa-f4be737f7570",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b9e8fe43-b6b2-44e0-bf32-eaae774c6727",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

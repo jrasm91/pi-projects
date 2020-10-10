@@ -1,0 +1,20 @@
+<div class="d-flex justify-content-between w-100">
+	<div class="header-container d-flex align-items-center">
+		<div class="logo-container d-flex align-items-center">
+			<a (click)="toggleSidebar()" class="sidebar-toggle cursor-pointer">
+				<nb-icon icon="bars"></nb-icon>
+			</a>
+			<a class="logo" routerLink="/">
+				<span>Pi Sprinkler</span>
+			</a>
+		</div>
+	</div>
+	<span class="d-flex flex-grow"></span>
+	<div class="header-container d-flex align-items-center">
+		<div class="d-flex align-items-center">
+			<!-- <nb-actions size="medium">
+				<nb-action icon="user-circle" [nbContextMenu]="userMenu" class="d-flex"></nb-action>
+			</nb-actions> -->
+		</div>
+	</div>
+</div>

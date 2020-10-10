@@ -11,7 +11,8 @@ const app = express();
 app.use(morgan(':method :url :status :response-time ms - :res[content-length]'));
 
 // Website
-app.use(express.static('website')); 
+const websiteFolder = process.env.WEBSITE === 'prod'? 'website-prod/dist' : 'website-dev';
+app.use(express.static(websiteFolder)); 
 
 // API
 app.use(bodyParser.json());

@@ -1,0 +1,24 @@
+<nb-card>
+	<nb-card-header>
+		<h6>
+			<a routerLink="/zones/{{ zone.id }}/details">
+				<span>{{ zone.name }}</span>
+			</a>
+		</h6>
+	</nb-card-header>
+	<nb-card-body>
+		<div>
+			<div class="d-flex justify-content-between">
+				<div class="d-flex flex-column justify-content-around">
+					<span>Running</span>
+				</div>
+				<pi-toggle-readonly [checked]="zone.running"></pi-toggle-readonly>
+			</div>
+		</div>
+		<hr>
+		<div class="text-muted">
+			<span class="font-weight-bold">Zone Id: </span>
+			<span>{{ zone.id }}</span>
+		</div>
+	</nb-card-body>
+</nb-card>

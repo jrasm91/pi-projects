@@ -1,0 +1,29 @@
+<div>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a routerLink="/">Home</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<span>Zones</span>
+			</li>
+		</ol>
+	</nav>
+</div>
+<div class="row">
+	<div class="col-12">
+		<router-outlet></router-outlet>
+	</div>
+</div>
+<h1 class="d-flex justify-content-between">
+	<span>Zones</span>
+	<div>
+		<button nbButton status="primary" routerLink="/zones/new">Add Zone</button>
+	</div>
+</h1>
+<hr>
+<div class="row pi-overscroll">
+	<div class="col-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let zone of zones">
+		<pi-zone-card [zone]="zone"></pi-zone-card>
+	</div>
+</div>

@@ -1,0 +1,49 @@
+<div *ngIf="zone">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a routerLink="/">Home</a>
+			</li>
+			<li class="breadcrumb-item">
+				<a routerLink="/zones">Zones</a>
+			</li>
+			<li class="breadcrumb-item active">
+				<span>{{ zone.name }}</span>
+			</li>
+		</ol>
+	</nav>
+	<h1 class="d-flex justify-content-between">
+		<span>{{ zone.name }}</span>
+		<div>
+			<button nbButton status="primary" class="ml-2" (click)="edit()">
+				<span class="fa fa-pencil-alt mr-2"></span>
+				<span>Edit</span>
+			</button>
+			<button nbButton status="danger" class="ml-2" (click)="delete()"
+				[nbSpinner]="deleteLoading" nbSpinnerStatus="danger">
+				<span class="fa fa-trash-alt mr-2"></span>
+				<span>Delete</span>
+			</button>
+		</div>
+	</h1>
+	<h5 class="text-muted">
+		<span class="text-bold">Zone Id: </span>
+		<span>{{ zone.id }}</span>
+	</h5>
+	<hr>
+	<div class="row pi-overscroll">
+		<div class="col-12 col-md-6 col-lg-4">
+			<nb-card>
+				<nb-card-header>Details</nb-card-header>
+				<nb-card-body>
+					<div class="d-flex justify-content-between">
+						<div class="d-flex flex-column justify-content-around">
+							<span>Running</span>
+						</div>
+						<pi-toggle-readonly [checked]="zone.running"></pi-toggle-readonly>
+					</div>
+				</nb-card-body>
+			</nb-card>
+		</div>
+	</div>
+</div>
