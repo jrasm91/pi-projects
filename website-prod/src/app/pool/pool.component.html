@@ -26,7 +26,7 @@
 
         </nb-card>
     </div>
-    <div class="col-12 col-lg-4">
+    <div class="col-12 col-lg-8">
         <nb-card [nbSpinner]="historyLoading" nbSpinnerStatus="primary">
             <nb-card-body>
                 <h3>Pool History</h3>
@@ -36,7 +36,13 @@
                         <span>Refresh</span>
                     </button>
                 </div>
+
+                <hr>
             </nb-card-body>
         </nb-card>
     </div>
+</div>
+
+<div class="container">
+    <div echarts [options]="options" theme="dark" class="demo-chart"></div>
 </div>

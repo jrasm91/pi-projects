@@ -6,6 +6,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NbDialogModule, NbMenuModule, NbSidebarModule, NbToastrModule } from '@nebular/theme';
+import * as echarts from 'echarts';
+import { NgxEchartsModule } from 'ngx-echarts';
 import { AppComponent } from './app.component';
 import { ToggleReadonlyComponent } from './components/toggle-readonly/toggle-readonly.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -22,6 +24,7 @@ import { ZoneCreateComponent } from './zones/zone-create/zone-create.component';
 import { ZoneDetailComponent } from './zones/zone-detail/zone-detail.component';
 import { ZoneResolve } from './zones/zone.resolve';
 import { ZonesComponent } from './zones/zones/zones.component';
+
 
 const routes: Routes = [
 	{
@@ -91,6 +94,10 @@ const modals = [
 	EditZoneModalComponent,
 ];
 
+export function chartModule(): any {
+	return echarts;
+}
+
 @NgModule({
 	declarations: [...components, ...modals, PoolComponent],
 	imports: [
@@ -107,6 +114,10 @@ const modals = [
 		NbMenuModule.forRoot(),
 		NbToastrModule.forRoot({ duration: 10000 }),
 		NbDialogModule.forRoot(),
+
+		NgxEchartsModule.forRoot({
+			echarts: { init: echarts.init },
+		}),
 	],
 	providers: [ZoneResolve],
 	entryComponents: [...modals],
