@@ -5,8 +5,10 @@ const sensors = require('./sensors');
 const api = express.Router();
 
 // Sensors
-api.get('/sensors/pool', sensors.getPoolTemp);
-api.get('/sensors/air', sensors.getAirTemp);
+api.get('/sensors/live/pool', sensors.getPoolTemp);
+api.get('/sensors/live/air', sensors.getAirTemp);
+api.get('/sensors/history/air', sensors.getAirHistory);
+api.get('/sensors/history/pool', sensors.getPoolHistory);
 
 // Zones
 api.get('/zones', zones.getAll);

@@ -1,4 +1,7 @@
 const { spawn } = require('child_process');
+const fs = require('fs');
+const util = require('util');
+const readFile = util.promisify(fs.readFile);
 
 async function run(command, args) {
 	return new Promise((resolve, reject) => {
@@ -38,6 +41,12 @@ async function run(command, args) {
 	});
 }
 
+async function readCSV(filename) {
+	const buffer = await readFile(filename, 'utf8');
+	const lines = buffer.toString().trim().replace(/\r/, '').split('\n');
+	return lines.map(line => line.split(','));
+}
+
 async function getSensorTemp(sensorId) {
 	const output = await run('python3', ['./scripts/sensor_temp.py', sensorId]);
 	const [temperature, date] = output[0].trim().split('|');
@@ -46,4 +55,5 @@ async function getSensorTemp(sensorId) {
 
 module.exports = {
 	getSensorTemp,
+	readCSV,
 };
