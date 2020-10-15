@@ -23,8 +23,36 @@ async function getPoolTemp(req, res) {
 	}
 }
 
+async function getAirHistory(req, res) {
+	try {
+		const results = await commands.readCSV('./data/air_temp_history.csv');
+		results.forEach(result => {
+			result[0] = parseFloat(result[0]);
+		});
+		return res.send(results);
+	} catch (error) {
+		console.error(Error);
+		return res.status(500).send(`Unable to get air history: ${error}`);
+	}
+}
+
+async function getPoolHistory(req, res) {
+	try {
+		const results = await commands.readCSV('./data/pool_temp_history.csv');
+		results.forEach(result => {
+			result[0] = parseFloat(result[0]);
+		});
+		return res.send(results);
+	} catch (error) {
+		console.error(error);
+		return res.status(500).send(`Unable to get pool history: ${error}`);
+	}
+}
+
 // Outside Temperature
 module.exports = {
 	getAirTemp,
 	getPoolTemp,
+	getAirHistory,
+	getPoolHistory
 };

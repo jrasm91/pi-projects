@@ -9,8 +9,6 @@ interface SensorResponse {
 	date: Date;
 }
 
-const toDate = tap((response: SensorResponse) => response.date = new Date(response.date));
-
 @Injectable({ providedIn: 'root' })
 export class APIService {
 	private _zones = new BehaviorSubject<Zone[]>([]);
@@ -53,11 +51,32 @@ export class APIService {
 	}
 
 	public getPoolTemp() {
-		return this.http.get<SensorResponse>('/api/sensors/pool').pipe(toDate);
+		return this.http.get<SensorResponse>('/api/sensors/live/pool')
+			.pipe(tap(response => response.date = new Date(response.date)));
+	}
+
+	public getPoolHistory() {
+		return this.http.get<[number, Date][]>('/api/sensors/history/pool')
+			.pipe(tap(results => {
+				results.forEach(result => {
+					result[1] = new Date(result[1]);
+				});
+			}));
 	}
 
 	public getAirTemp() {
-		return this.http.get<SensorResponse>('/api/sensors/air').pipe(toDate);
+		return this.http.get<SensorResponse>('/api/sensors/live/air')
+			.pipe(tap(response => response.date = new Date(response.date)));
+
+	}
+
+	public getAirHistory() {
+		return this.http.get<[number, Date][]>('/api/sensors/history/air')
+			.pipe(tap(results => {
+				results.forEach(result => {
+					result[1] = new Date(result[1]);
+				});
+			}));
 	}
 
 	public test(name: string) {
