@@ -1,6 +1,5 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const http = require('http');
 const morgan = require('morgan');
 const api = require('./api');
 
@@ -10,16 +9,12 @@ const app = express();
 // Logging
 app.use(morgan(':method :url :status :response-time ms - :res[content-length]'));
 
-// Website
-const websiteFolder = process.env.WEBSITE === 'prod'? 'website-prod/dist' : 'website-dev';
-app.use(express.static(websiteFolder));
+// Static Website
+app.use(express.static('website-dev'));
 
-// API
+// API Routes
 app.use(bodyParser.json());
 app.use('/api', api);
 
-// Start server
-http.createServer(app).listen(port, () => {
-  console.info(`Listening on Port ${port}`);
-});
-
+// Start Server
+app.listen(port, () => console.info(`Listening on Port ${port}`));
