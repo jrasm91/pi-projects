@@ -1,14 +1,23 @@
 const express = require('express');
+const air = require('./air');
+const pool = require('./pool');
+const sv = require('./sous-vide')
 const zones = require('./zones');
-const sensors = require('./sensors');
 
 const api = express.Router();
 
-// Sensors
-api.get('/sensors/live/pool', sensors.getPoolTemp);
-api.get('/sensors/live/air', sensors.getAirTemp);
-api.get('/sensors/history/air', sensors.getAirHistory);
-api.get('/sensors/history/pool', sensors.getPoolHistory);
+// Pool Temperature
+api.get('/pool/temperature', pool.getTemperature);
+api.get('/pool/history', pool.getHistory);
+
+// Air Temperature
+api.get('/air/temperature', air.getTemperature);
+api.get('/air/history', air.getHistory);
+
+api.get('/sous-vide/sensors', sv.getAll);
+api.get('/sous-vide/sensors/:id', sv.getById);
+api.post('/sous-vide/sensors/:id/start', sv.start);
+api.post('/sous-vide/sensors/:id/stop', sv.stop);
 
 // Zones
 api.get('/zones', zones.getAll);
