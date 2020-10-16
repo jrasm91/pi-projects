@@ -12,6 +12,12 @@ export const menu: NbMenuItem[] = [
 		link: '/pool',
 		pathMatch: 'prefix',
 	},
+	{
+		title: 'Sous Vide',
+		icon: 'utensils',
+		link: '/sous-vide',
+		pathMatch: 'prefix',
+	},
 	// {
 	// 	title: 'Usage',
 	// 	icon: 'faucet',

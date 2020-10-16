@@ -9,6 +9,28 @@ interface SensorResponse {
 	date: Date;
 }
 
+export interface CookingSensor {
+	timestamps: {
+		heating: Date;
+		off: Date;
+		warming: Date;
+		ready: Date;
+		cooking: Date;
+		cooling: Date;
+	};
+	state: string;
+	heating: boolean;
+	temperature: number;
+	lastUpdated: Date;
+	settings: {
+		duration: number;
+		temperature: number;
+		minTemperature: number;
+	};
+	history: [];
+	_intervalId: null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class APIService {
 	private _zones = new BehaviorSubject<Zone[]>([]);
@@ -51,12 +73,12 @@ export class APIService {
 	}
 
 	public getPoolTemp() {
-		return this.http.get<SensorResponse>('/api/sensors/live/pool')
+		return this.http.get<SensorResponse>('/api/pool/temperature')
 			.pipe(tap(response => response.date = new Date(response.date)));
 	}
 
 	public getPoolHistory() {
-		return this.http.get<[number, Date][]>('/api/sensors/history/pool')
+		return this.http.get<[number, Date][]>('/api/pool/history')
 			.pipe(tap(results => {
 				results.forEach(result => {
 					result[1] = new Date(result[1]);
@@ -65,18 +87,22 @@ export class APIService {
 	}
 
 	public getAirTemp() {
-		return this.http.get<SensorResponse>('/api/sensors/live/air')
+		return this.http.get<SensorResponse>('/api/air/temperature')
 			.pipe(tap(response => response.date = new Date(response.date)));
 
 	}
 
 	public getAirHistory() {
-		return this.http.get<[number, Date][]>('/api/sensors/history/air')
+		return this.http.get<[number, Date][]>('/api/air/history')
 			.pipe(tap(results => {
 				results.forEach(result => {
 					result[1] = new Date(result[1]);
 				});
 			}));
+	}
+
+	public getSousVides() {
+		return this.http.get<Array<CookingSensor>>('/api/sous-vide/sensors');
 	}
 
 	public test(name: string) {

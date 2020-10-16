@@ -1,36 +1,6 @@
-<div>
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item">
-				<a routerLink="/">Home</a>
-			</li>
-			<li class="breadcrumb-item active">
-				<span>Pool</span>
-			</li>
-		</ol>
-	</nav>
-</div>
-<h1>Pool</h1>
-<hr>
 <div class="row pi-overscroll">
-	<div class="col-12 col-lg-8">
-		<nb-card [nbSpinner]="historyLoading" nbSpinnerStatus="primary">
-			<nb-card-body>
-				<div class="d-flex justify-content-between">
-					<h3>History</h3>
-					<div>
-						<span
-							[hidden]="historyLoading"
-							class="fa fa-2x fa-sync-alt mr-2 cursor-pointer"
-							(click)="refreshHistory()"></span>
-					</div>
-				</div>
-				<hr>
-				<div echarts [options]="options" [merge]="updateOptions" theme="dark" class="demo-chart"></div>
-			</nb-card-body>
-		</nb-card>
-	</div>
 	<div class="col-12 col-lg-4">
+		<h1>Pool Temperature</h1>
 		<nb-card [nbSpinner]="tempLoading" nbSpinnerStatus="primary">
 			<nb-card-body>
 				<div class="d-flex justify-content-between">
@@ -50,6 +20,12 @@
 				<hr>
 				<p class="text-muted">Last updated: {{ lastUpdated | date:'mediumTime' }}</p>
 			</nb-card-body>
+		</nb-card>
+	</div>
+	<div class="col-12 col-lg-8">
+		<h1>Pool History</h1>
+		<nb-card [nbSpinner]="historyLoading" nbSpinnerStatus="primary">
+			<div echarts [options]="options" [merge]="updateOptions" theme="dark" class="demo-chart"></div>
 		</nb-card>
 	</div>
 </div>

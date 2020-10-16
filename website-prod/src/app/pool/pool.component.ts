@@ -10,15 +10,64 @@ import { APIService } from '../api.service';
 export class PoolComponent implements OnInit {
 
 	poolTemp: number;
-	poolHistory: any[] = [];
 
 	lastUpdated: Date;
 	tempLoading = false;
 	historyLoading = false;
 
-	constructor(
-		private api: APIService,
-	) { }
+	isLoading = false;
+	updateOptions: any;
+	options = {
+		// title: {
+		// 	text: 'Pool History',
+		// 	textAlign: 'middle',
+		// 	textStyle: {
+		// 		fontWeight: 'bold',
+		// 		fontSize: 36,
+		// 		fontFamily: 'Open Sans, sans-serif',
+		// 	},
+		// 	top: 25,
+		// 	left: '50%',
+		// },
+		legend: {
+			data: ['Pool Temperature', 'Air Temperature'],
+			align: 'left',
+		},
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: { animation: false },
+		},
+		xAxis: {
+			type: 'time',
+			splitLine: {
+				show: false,
+			},
+		},
+		yAxis: {
+			type: 'value',
+			boundaryGap: [0, '100%'],
+		},
+		series: [
+			{
+				name: 'pool-temp',
+				type: 'line',
+				showSymbol: false,
+				data: [],
+				animationDelay: (idx) => idx * 10,
+			},
+			{
+				name: 'air-temp',
+				type: 'line',
+				showSymbol: false,
+				data: [],
+				animationDelay: (idx) => idx * 10,
+			},
+		],
+		animationEasing: 'elasticOut',
+		animationDelayUpdate: (idx) => idx * 5,
+	};
+
+	constructor(private api: APIService) { }
 
 	public ngOnInit() {
 		this.refreshTemp();
@@ -40,75 +89,23 @@ export class PoolComponent implements OnInit {
 
 	public refreshHistory() {
 		this.historyLoading = true;
-		combineLatest([timer(500), this.api.getPoolHistory()])
-			.pipe(
-				map(([_, response]) => response),
-				finalize(() => this.historyLoading = false),
-			)
-			.subscribe(response => {
-				this.poolHistory = response;
+		combineLatest([this.api.getPoolHistory(), this.api.getAirHistory(), timer(500)])
+			.pipe(finalize(() => this.historyLoading = false))
+			.subscribe(([poolHistory, airHistory]) => {
 				this.updateOptions = {
 					series: [
-						{
-							data: response.map(([temperature, dateString]) => {
-								const date = new Date(dateString);
-								return {
-									name: date.toDateString(),
-									value: [date.toISOString(), temperature],
-								};
-							}),
-						},
-						{
-							data: response.map(([temperature, dateString]) => {
-								const date = new Date(dateString);
-								return {
-									name: date.toDateString(),
-									value: [date.toISOString(), temperature - 10],
-								};
-							}),
-						}],
+						{ data: poolHistory.map(([temp, date]) => this.toTimeItem(temp, date)) },
+						{ data: airHistory.map(([temp, date]) => this.toTimeItem(temp, date)) },
+					],
 				};
 			});
 	}
 
-	isLoading = false;
-	updateOptions: any;
-	options = {
-		legend: {
-			data: ['Sensor 1', 'Sensor 2'],
-			align: 'left',
-		},
-		tooltip: {
-			trigger: 'axis',
-			axisPointer: { animation: false },
-		},
-		xAxis: {
-			type: 'time',
-			splitLine: {
-				show: false,
-			},
-		},
-		yAxis: {
-			type: 'value',
-			boundaryGap: [0, '100%'],
-		},
-		series: [
-			{
-				name: 'sensor1',
-				type: 'line',
-				showSymbol: false,
-				data: [],
-				animationDelay: (idx) => idx * 10,
-			},
-			{
-				name: 'sensor2',
-				type: 'line',
-				showSymbol: false,
-				data: [],
-				animationDelay: (idx) => idx * 10,
-			},
-		],
-		animationEasing: 'elasticOut',
-		animationDelayUpdate: (idx) => idx * 5,
-	};
+	private toTimeItem(temperature, dateString) {
+		const date = new Date(dateString);
+		return {
+			name: date.toDateString(),
+			value: [date.toISOString(), temperature],
+		};
+	}
 }

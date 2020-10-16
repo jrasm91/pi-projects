@@ -1,0 +1,21 @@
+<h1>Sous Vide Sensors</h1>
+<hr>
+<div class="row pi-overscroll">
+  <div class="col-12 col-lg-4" *ngFor="let sensor of sensors">
+    <nb-card>
+      <nb-card-body>
+        <div class="d-flex justify-content-between">
+          <h1>
+            <div>
+              <span>{{ sensor.name }}</span>
+              <span>{{ sensor.temperature }}°F</span>
+              <span class="fas ml-2 fa-thermometer-three-quarters text-danger"></span>
+            </div>
+          </h1>
+        </div>
+        <hr>
+        <p class="text-muted">Last updated: {{ sensor.lastUpdated | date:'mediumTime' }}</p>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

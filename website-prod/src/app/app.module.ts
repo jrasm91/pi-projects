@@ -15,6 +15,7 @@ import { HeaderComponent } from './header/header.component';
 import { EditZoneModalComponent } from './modals/edit-zone-modal/edit-zone-modal.component';
 import { PoolComponent } from './pool/pool.component';
 import { ScheduleComponent } from './schedule/schedule.component';
+import { SousVideComponent } from './sous-vide/sous-vide.component';
 import { TestComponent } from './test/test.component';
 import { ThemeModule } from './theme/theme.module';
 import { TroubleshootComponent } from './troubleshoot/troubleshoot.component';
@@ -34,6 +35,10 @@ const routes: Routes = [
 	{
 		path: 'pool',
 		component: PoolComponent,
+	},
+	{
+		path: 'sous-vide',
+		component: SousVideComponent,
 	},
 	{
 		path: 'zones/:id/details',
@@ -99,7 +104,7 @@ export function chartModule(): any {
 }
 
 @NgModule({
-	declarations: [...components, ...modals, PoolComponent],
+	declarations: [...components, ...modals, PoolComponent, SousVideComponent],
 	imports: [
 		HttpClientModule,
 		BrowserModule,
