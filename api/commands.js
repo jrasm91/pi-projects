@@ -50,7 +50,7 @@ async function readCSV(filename) {
 async function getSensorTemp(sensorId) {
 	const output = await run('python3', ['./scripts/sensor_temp.py', sensorId]);
 	const [temperature, date] = output[0].trim().split('|');
-	return { temperature: parseFloat(temperature), date };
+	return { temperature: parseFloat(temperature), date: new Date(date) };
 }
 
 module.exports = {
