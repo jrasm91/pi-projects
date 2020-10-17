@@ -16,8 +16,9 @@ api.get('/air/history', air.getHistory);
 
 api.get('/sous-vide/sensors', sv.getAll);
 api.get('/sous-vide/sensors/:id', sv.getById);
-api.post('/sous-vide/sensors/:id/start', sv.start);
-api.post('/sous-vide/sensors/:id/stop', sv.stop);
+api.post('/sous-vide/sensors/:id/on', sv.turnOn);
+api.post('/sous-vide/sensors/:id/start-cooking', sv.startCooking);
+api.post('/sous-vide/sensors/:id/off', sv.turnOff);
 
 // Zones
 api.get('/zones', zones.getAll);

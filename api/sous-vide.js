@@ -11,7 +11,7 @@ const STATE = {
   START_COOKING: 'START_COOKING',
   COOKING: 'COOKING',
   COOLING: 'COOLING',
-}
+};
 
 const DEFAULT_SENSOR = {
   timestamps: {
@@ -29,7 +29,6 @@ const DEFAULT_SENSOR = {
   settings: {
     duration: null,
     temperature: null,
-    minTemperature: null,
   },
 
   history: [],
@@ -52,7 +51,7 @@ async function run(current) {
   const isBelowTemp = current.temperature < (current.settings.temperature - config.MAX_TEMPERATURE_DROP);
   const isBelowSafeTemp = current.temperature < config.SAFE_TEMPERATURE;
 
-  const isDoneCooling = dateDiff(now, current.timestamps.heating) > config.MIN_HEATING_COOLDOWN;
+  const isRelayCool = dateDiff(now, current.timestamps.heating) > config.MIN_HEATING_COOLDOWN;
   const isDoneCooking = current.timestamps.cooking && dateDiff(now, current.timestamps.cooking) > current.settings.duration;
 
   switch (current.state) {
@@ -85,7 +84,7 @@ async function run(current) {
       }
 
       if (!current.heating && isBelowTemp) {
-        if (isDoneCooling) {
+        if (isRelayCool) {
           current.heating = true;
           current.heating = now;
         } else {
@@ -141,7 +140,7 @@ function getById(req, res) {
   return res.send(sensor);
 }
 
-function start(req, res) {
+function turnOn(req, res) {
   const sensorId = req.params.id;
   const sensor = sensors[sensorId];
   if (!sensor) {
@@ -156,14 +155,13 @@ function start(req, res) {
 
   sensor.settings.duration = duration;
   sensor.settings.temperature = temperature;
-  sensor.settings.minTemperature = temperature - config.TEMPERATURE_THRESHOLD;
-  sensor.state = STATE.STARTING;
+  sensor.state = STATE.START_WARMING;
 
   sensor._intervalId = setInterval(() => run(sensor), 1000);
   return res.send({ message: 'Started sensor' });
 }
 
-function stop(req, res) {
+function turnOff(req, res) {
   const sensorId = req.params.id;
   const sensor = sensors[sensorId];
   if (!sensor) {
@@ -175,9 +173,21 @@ function stop(req, res) {
   }
 }
 
+function startCooking(req, res){
+  const sensorId = req.params.id;
+  const sensor = sensors[sensorId];
+  if (!sensor) {
+    return res.status(404).send({ error: true, message: `Sensor not found: ${sensorId}` });
+  }
+
+  sensor.state = STATE.START_COOKING;
+
+  return res.send({ message: 'Started cooking' });  
+}
+
 function suveLog(message) {
   console.log('RUN>' + message);
 }
 
-module.exports = { getAll, getById, start, stop };
+module.exports = { getAll, getById, turnOn, turnOff, startCooking  };
 
