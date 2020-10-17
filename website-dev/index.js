@@ -11,7 +11,7 @@ var app = new Vue({
     refreshPoolTemp: async function () {
       try {
         app.pool_temperature = 'Loading...';
-        const { temperature, date } = await fetch('/api/sensors/pool').then(response => response.json());
+        const { temperature, date } = await fetch('/api/pool/temperature').then(response => response.json());
         console.log(`Loaded temperature=${temperature}, date=${date}`);
         app.pool_temperature = temperature;
       } catch (error) {
