@@ -1,4 +1,10 @@
+Wick canner 1700 watts (~14 amps @ 120 VAC)
+
+
+
 # Pi Projects
+
+
 
 ## Install Node on Pi Zero
 https://www.w3schools.com/nodejs/nodejs_raspberrypi.asp
