@@ -1,0 +1,1 @@
+python /home/pi/fred/outside_temp.py >> /home/pi/fred/outside_temp_history.txt
