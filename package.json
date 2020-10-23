@@ -16,6 +16,7 @@
     "lodash": "^4.17.20",
     "lowdb": "^1.0.0",
     "morgan": "^1.10.0",
+    "onoff": "^6.0.1",
     "socketio": "^1.0.0"
   },
   "devDependencies": {

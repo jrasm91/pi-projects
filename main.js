@@ -4,6 +4,7 @@ const http = require('http');
 const morgan = require('morgan');
 
 const api = require('./api');
+const config = require('./api/config');
 const websockets = require('./api/websockets');
 
 const port = process.env.PORT || 4201;
@@ -23,3 +24,19 @@ app.use('/api', api);
 // Start Server
 server.listen(port, () => console.info(`Listening on Port ${port}`));
 websockets.listen(server);
+
+process.on('SIGINT', () => process.exit());
+process.on('SIGUSR1', () => process.exit());
+process.on('SIGUSR2', () => process.exit());
+process.on('exit', exitHandler);
+
+function exitHandler() {
+  console.log('Cleaning up GPIO');
+  for (const cooker of config.cookers) {
+    if (cooker._gpio) {
+      cooker._gpio.writeSync(0);
+      cooker._gpio.unexport();
+    }
+  }
+  process.exit();
+}

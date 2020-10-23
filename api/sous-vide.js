@@ -4,14 +4,27 @@ const { STATE, DEFAULT_COOKER } = require('./constant');
 const config = require('./config');
 const { dateDiff } = require('./helper');
 const websockets = require('./websockets');
+const GPIO = require('onoff').Gpio;
 
-const cookers = config.cookers.map(({ name, sensorId, gpio }) => {
-  return { name, sensorId, gpio, ...DEFAULT_COOKER };
+const cookers = config.cookers;
+cookers.forEach((cooker) => {
+  const gpio = cooker.gpio;
+  let _gpio;
+  try {
+    _gpio = new GPIO(gpio, 'out');
+  } catch (error) {
+    console.warn(`Failed to initialize GPIO ${gpio}, using mock pin instead`);
+    _gpio = {
+      write: async (value) => console.log(`mock_gpio>set ${gpio} to ${value} (async)`),
+      writeSync: value => console.log(`mock_gpio>set ${gpio} to ${value} (sync)`),
+      unexport: () => console.log(`mock_gpio>unexport ${gpio}`),
+    };
+  }
+  Object.assign(cooker, { _gpio, ...DEFAULT_COOKER });
 });
 
 // Main decision loop for sous vide cooker
 async function mainLoop(cooker) {
-  suveLog(`Starting ${cooker.name}`);
   const previous = _.cloneDeep(cooker);
 
   const { temperature } = await commands.getSensorTemp(cooker.sensorId);
@@ -113,10 +126,11 @@ async function mainLoop(cooker) {
   }
 
   if (previous.state !== cooker.state) {
-    suveLog(`Changed from ${previous.tate} to ${cooker.state}`)
+    suveLog(`Changed from ${previous.state} to ${cooker.state}`)
   }
 
   if (previous.heating !== cooker.heating) {
+    await cooker._gpio.write(cooker.heating ? 1 : 0);
     suveLog(`Changed heating from ${previous.heating} to ${cooker.heating}`)
   }
 
@@ -207,6 +221,7 @@ function startCooking(req, res) {
 function sendUpdate(cooker) {
   const clean = { ...cooker };
   delete clean._intervalId;
+  delete clean._gpio;
   websockets.sendMessage('cooker_update', clean);
 }
 
