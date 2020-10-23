@@ -151,6 +151,7 @@ function turnOn(req, res) {
     return res.status(400).send({ error: true, message: 'Bad Request: cooker is not stopped' });
   }
 
+  Object.assign(cooker, DEFAULT_COOKER);
   cooker.settings = { temperature, duration, minTemperature: temperature - config.TEMPERATURE_THRESHOLD }
   cooker.state = STATE.START_WARMING;
 
