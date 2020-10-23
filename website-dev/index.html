@@ -50,7 +50,8 @@
                 </div>
                 <hr>
                 <div class="text-center">
-                  <h4>Cook at {{ cooker.settings.temperature }}° for {{ cooker.settings.duration }}s
+                  <h4 v-if="cooker.state !== 'OFF'">
+                    Cook for {{ cooker.settings.duration }}s @ {{ cooker.settings.temperature }}°
                   </h4>
                   <h1>
                     <span class="font-weight-bold" :class="stateClass">{{ cooker.state }}</span>
