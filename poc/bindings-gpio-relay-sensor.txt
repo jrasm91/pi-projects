@@ -6,10 +6,19 @@ Sensor 1 28-0000096578cc to read cat 28-0000096578cc/w1_slave
 Sensor 2 28-00000976e714 to read cat 28-00000976e714/w1_slave
 Sensor 3 28-000009763e8a to read cat 28-000009763e8a/w1_slave
 
+~/.bashrc (place to add aliases, change colors, etc)
+
+alias pi-sensors="ls -l /sys/bus/w1/devices"
+alias pi-temps="cat /sys/bus/w1/devices/28-*/w1_slave"
+
+To reload the files after making changes
+source ~/.bashrc
+
 Manually reading Sensor
-    cd /sys/bus/devices
+    cd /sys/bus/w1/devices
     ls -l shows all sensors
+    ls -l /sys/bus/w1/devices
     read all sensors 
-        cat 28-*/w1_slave
+        cat /sys/bus/w1/devices/28-*/w1_slave
 
         cat 28-
