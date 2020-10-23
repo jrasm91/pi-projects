@@ -1,7 +1,7 @@
 const config = {
   POOL_SENSOR_ID: '28-000009640cfd',
   AIR_SENSOR_ID: '28-000009640cfd',
-  SENSOR_IDS = [
+  SENSOR_IDS: [
     { sensorId: '28-000009640cfd', gpio: 1, },
     { sensorId: '28-000009640cfd', gpio: 2, },
     { sensorId: '28-000009640cfd', gpio: 3, },

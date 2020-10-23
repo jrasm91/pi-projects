@@ -66,9 +66,11 @@
               </div>
               <div class="card-footer p-0">
                 <div class="footer-buttons d-flex justify-content-even">
-                  <button class="btn btn-success" @click="start()">Start</button>
-                  <button class="btn btn-default" @click="pause()">Pause</button>
-                  <button class="btn btn-danger" @click="stop()">Stop</button>
+                  <button class="btn btn-success" @click="turnOn()">On</button>
+                  <button class="btn btn-danger" @click="turnOff()">Off</button>
+                  <!-- <button class="btn" @click="pause()">Pause</button> -->
+                  <!-- <button class="btn" @click="resume()">Resume</button> -->
+                  <button class="btn btn-success" @click="startCooking()">Start Cooking</button>
                 </div>
               </div>
             </div>

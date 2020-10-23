@@ -63,14 +63,20 @@ const app = new Vue({
     },
   },
   methods: {
-    start: function () {
-      callAPI('/api/sous-vide/sensors/0/start', { temperature: 150, duration: 600 });
+    turnOn: function () {
+      callAPI('/api/sous-vide/sensors/0/turnOn', { temperature: 150, duration: 600 });
     },
-    stop: function () {
-      callAPI('/api/sous-vide/sensors/0/stop');
+    turnOff: function () {
+      callAPI('/api/sous-vide/sensors/0/turnOff');
     },
     pause: function () {
       callAPI('/api/sous-vide/sensors/0/pause');
+    },
+    resume: function () {
+      callAPI('/api/sous-vide/sensors/0/resume');
+    },
+    startCooking: function () {
+      callAPI('/api/sous-vide/sensors/0/start-cooking');
     }
   }
 });
