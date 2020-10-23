@@ -1,0 +1,15 @@
+Relay 1 GPIO (21) RPI (P37) Waveboard (P25)  BCM (26) 
+Relay 2 GPIO (20) RPI (P38) Waveboard (P28)  BCM (20) 
+Relay 3 GPIO (26) RPI (P40) Waveboard (P29)  BCM (21) 
+
+Sensor 1 28-0000096578cc to read cat 28-0000096578cc/w1_slave
+Sensor 2 28-00000976e714 to read cat 28-00000976e714/w1_slave
+Sensor 3 28-000009763e8a to read cat 28-000009763e8a/w1_slave
+
+Manually reading Sensor
+    cd /sys/bus/devices
+    ls -l shows all sensors
+    read all sensors 
+        cat 28-*/w1_slave
+
+        cat 28-

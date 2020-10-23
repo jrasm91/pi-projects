@@ -13,7 +13,7 @@ const STATE = {
   COOKING: 'COOKING',
   START_COOLING: 'START_COOLING',
   COOLING: 'COOLING',
-}
+};
 
 const DEFAULT_SENSOR = {
   timestamps: {
@@ -50,7 +50,7 @@ async function mainLoop(current) {
   const isBelowTemp = current.temperature < (current.settings.temperature - config.MAX_TEMPERATURE_DROP);
   const isBelowSafeTemp = current.temperature < config.SAFE_TEMPERATURE;
 
-  const isDoneCooling = dateDiff(now, current.timestamps.heating) > config.MIN_HEATING_COOLDOWN;
+  const isRelayCool = dateDiff(now, current.timestamps.heating) > config.MIN_HEATING_COOLDOWN;
   const isDoneCooking = current.timestamps.cooking && dateDiff(now, current.timestamps.cooking) > current.settings.duration;
 
   function heating(onoff) {
@@ -111,7 +111,7 @@ async function mainLoop(current) {
       }
 
       if (!current.heating && isBelowTemp) {
-        if (isDoneCooling) {
+        if (isRelayCool) {
           heating(true);
         } else {
           suveLog(`Needs heat, but hasn't met cooldown period.`);
@@ -171,7 +171,7 @@ function sensorMiddleware() {
 const getAll = (req, res) => res.send(sensors);
 const getById = (req, res) => res.send(req.sensor);
 
-function start(req, res) {
+function turnOn(req, res) {
   const { duration, temperature } = req.body;
   if (!duration || !temperature) {
     return res.status(400).send({ error: true, message: 'Bad Request: body.duration and body.temperature are required.' });
@@ -184,7 +184,6 @@ function start(req, res) {
 
   sensor.settings = { temperature, duration, minTemperature: temperature - config.TEMPERATURE_THRESHOLD }
   sensor.state = STATE.START_WARMING;
-  sendUpdate(sensor);
 
   if (!sensor._intervalId) {
     sensor._intervalId = setInterval(async () => {
@@ -198,15 +197,16 @@ function start(req, res) {
     }, config.LOOP_INTERVAL * 1000);
   }
 
-  return res.send({ message: 'Started sensor' });
+  sendUpdate(sensor);
+  return res.sendStatus(201);
 }
 
-function stop(req, res) {
+function turnOff(req, res) {
   const sensor = req.sensor;
   sensor.state = STATE.START_COOLING;
   Object.assign(sensor.settings, DEFAULT_SENSOR.settings);
-  res.sendStatus(201);
   sendUpdate(sensor);
+  return res.sendStatus(201);
 }
 
 function pause(req, res) {
@@ -215,7 +215,7 @@ function pause(req, res) {
     clearInterval(this._intervalId);
   }
   sendUpdate(sensor);
-  res.sendStatus(201);
+  return res.sendStatus(201);
 }
 
 function resume(req, res) {
@@ -224,7 +224,14 @@ function resume(req, res) {
     sensor._intervalId = setTimeout()
   }
   sendUpdate(sensor);
-  res.sendStatus(201);
+  return res.sendStatus(201);
+}
+
+function startCooking(req, res) {
+  const sensor = req.sensor;
+  sensor.state = STATE.START_COOKING;
+  sendUpdate(sensor);
+  return res.sendStatus(201);
 }
 
 function sendUpdate(sensor) {
@@ -241,9 +248,10 @@ module.exports = {
   sensorMiddleware,
   getAll,
   getById,
-  start,
-  stop,
+  turnOn,
+  turnOff,
   pause,
   resume,
+  startCooking,
 };
 

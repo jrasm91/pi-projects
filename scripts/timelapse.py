@@ -11,7 +11,7 @@ import time
 base_path = os.path.abspath(os.path.join('..', 'images',))
 font_path = "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 if os.name == 'nt':
-	base_path = 'C:\\___Raspberry PI\\Camera'
+	base_path = 'C:\\#ras-pie\\Camera'
 	font_path = "C:\\Windows\Fonts\\arial.ttf"
 core_count = mp.cpu_count()
 font = ImageFont.truetype(font_path, 76)

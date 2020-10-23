@@ -16,10 +16,11 @@ api.get('/air/history', air.getHistory);
 
 api.get('/sous-vide/sensors', sv.getAll);
 api.get('/sous-vide/sensors/:id', sv.sensorMiddleware(), sv.getById);
-api.post('/sous-vide/sensors/:id/start', sv.sensorMiddleware(), sv.start);
-api.post('/sous-vide/sensors/:id/stop', sv.sensorMiddleware(), sv.stop);
+api.post('/sous-vide/sensors/:id/turnOn', sv.sensorMiddleware(), sv.turnOn);
+api.post('/sous-vide/sensors/:id/turnOff', sv.sensorMiddleware(), sv.turnOff);
 api.post('/sous-vide/sensors/:id/pause', sv.sensorMiddleware(), sv.pause);
 api.post('/sous-vide/sensors/:id/resume', sv.sensorMiddleware(), sv.resume);
+api.post('/sous-vide/sensors/:id/start-cooking', sv.sensorMiddleware(), sv.startCooking);
 
 // Zones
 api.get('/zones', zones.getAll);
