@@ -6,35 +6,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="/lib/bootstrap.css">
+  <link rel="stylesheet" href="/lib/font-awesome.css">
   <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
-  <div id="app" class="container">
-    <div id="content" class="flex-grow-1 ml-2 bg-white rounded">
-      <div class="container">
-        <div class="row">
-          <!-- Pool -->
-          <div class="col-12 col-lg-4">
-            <h1>Pool</h1>
-            <p>The current pool temperature is {{ pool_temperature }}°F.</p>
-            <button type="button" class="btn btn-primary" v-on:click="refreshPoolTemp">Refresh</button>
-          </div>
-
-          <!-- Pool History -->
-          <div class="col-12 col-lg-8">
-            <h1>Pool History</h1>
-            <p>Pool history goes here</p>
-          </div>
-        </div>
-
-        <hr>
-
+  <div id="app">
+    <div id="main">
+      <div class="container mt-2">
+        <section v-if="page === 1">
+          <article>
+            <div class="card">
+              <div class="card-header">Pool</div>
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                  card's
+                  content.</p>
+              </div>
+              <div class="card-footer">
+                <div class="footer-buttons d-flex justify-content-even">
+                  <button class="btn btn-success">Placeholder</button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+        <section v-if="page === 2">
+          <article>
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="text-center">
+                    <h1 class="font-weight-bold">
+                      <i class="fa text-danger" :class="temperatureIcon"></i>
+                      <span>{{ cooker.temperature }}°</span>
+                      <span class="font-size-smaller" v-if="cooker.settings.temperature">/
+                        {{ cooker.settings.temperature }}°</span>
+                    </h1>
+                  </div>
+                  <div class="text-center">
+                    <h1>
+                      <i class="fa fa-fire" :class="heatingClass"></i>
+                      <span class="font-weight-bold">{{ cooker.heating | heatingLabel }}</span>
+                    </h1>
+                  </div>
+                </div>
+                <hr>
+                <h1 class="text-center">
+                  <span class="font-weight-bold" :class="stateClass">{{ cooker.state }}</span>
+                </h1>
+                <h4 class="text-center">{{ stateTimeAgo }}</h4>
+                <hr>
+                <h4>Cook at {{ cooker.settings.temperature }}° for {{ cooker.settings.duration }} (seconds)</h4>
+                <div class="d-flex justify-content-between">
+                  <span></span>
+                  <span class="text-muted">Last Updated: {{ cooker?.lastUpdated | time }}</span>
+                </div>
+              </div>
+              <div class="card-footer p-0">
+                <div class="footer-buttons d-flex justify-content-even">
+                  <button class="btn btn-success" @click="start()">Start</button>
+                  <button class="btn btn-default" @click="pause()">Pause</button>
+                  <button class="btn btn-danger" @click="stop()">Stop</button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
       </div>
+    </div>
+    <div id="navbar">
+      <ul class="list-group">
+        <li class="list-group-item" @click="page = 2" :class="{ active: page === 2 }">
+          <span>Sous Vide</span>
+        </li>
+        <li class="list-group-item" @click="page = 1" v-bind:class="{ active: page === 1 }">
+          <span>Pool</span>
+        </li>
+      </ul>
     </div>
   </div>
 
+  <script src="/lib/socket.io.js"></script>
   <script src="/lib/vue.js"></script>
+  <script src="/filters.js"></script>
   <script src="/index.js"></script>
 </body>
 
