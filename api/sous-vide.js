@@ -1,97 +1,70 @@
 const _ = require('lodash');
 const commands = require('./commands');
+const { STATE, DEFAULT_COOKER } = require('./constant');
 const config = require('./config');
 const { dateDiff } = require('./helper');
 const websockets = require('./websockets');
 
-const STATE = {
-  OFF: 'OFF',
-  START_WARMING: 'START_WARMING',
-  WARMING: 'WARMING',
-  READY: 'READY',
-  START_COOKING: 'START_COOKING',
-  COOKING: 'COOKING',
-  START_COOLING: 'START_COOLING',
-  COOLING: 'COOLING',
-};
-
-const DEFAULT_SENSOR = {
-  timestamps: {
-    heating: null,
-    off: new Date(),
-    warming: null,
-    ready: null,
-    cooking: null,
-    cooling: null,
-  },
-  state: STATE.OFF,
-  heating: false,
-  temperature: null,
-  lastUpdated: null,
-  settings: {
-    duration: null,
-    temperature: null,
-  },
-  _intervalId: null,
-};
+const cookers = config.cookers.map(({ name, sensorId, gpio }) => {
+  return { name, sensorId, gpio, ...DEFAULT_COOKER };
+});
 
 // Main decision loop for sous vide cooker
-async function mainLoop(current) {
-  const previous = _.cloneDeep(current);
+async function mainLoop(cooker) {
+  suveLog(`Starting ${cooker.name}`);
+  const previous = _.cloneDeep(cooker);
 
-  suveLog(`Starting ${current.name}/${current.id}`);
-
-  const { temperature } = await commands.getSensorTemp(current.id);
+  const { temperature } = await commands.getSensorTemp(cooker.sensorId);
   const now = new Date();
-  current.temperature = temperature;
-  current.lastUpdated = now;
+  cooker.temperature = temperature;
+  cooker.lastUpdated = now;
 
-  const isAboveTemp = current.temperature >= current.settings.temperature;
-  const isBelowTemp = current.temperature < (current.settings.temperature - config.MAX_TEMPERATURE_DROP);
-  const isBelowSafeTemp = current.temperature < config.SAFE_TEMPERATURE;
+  const isAboveTemp = cooker.temperature >= cooker.settings.temperature;
+  const isBelowTemp = cooker.temperature < (cooker.settings.temperature - config.MAX_TEMPERATURE_DROP);
+  const isBelowSafeTemp = cooker.temperature < config.SAFE_TEMPERATURE;
 
-  const isRelayCool = dateDiff(now, current.timestamps.heating) > config.MIN_HEATING_COOLDOWN;
-  const isDoneCooking = current.timestamps.cooking && dateDiff(now, current.timestamps.cooking) > current.settings.duration;
+  const isRelayCool = dateDiff(now, cooker.timestamps.heating) > config.MIN_HEATING_COOLDOWN;
+  const isDoneCooking = cooker.timestamps.cooking && dateDiff(now, cooker.timestamps.cooking) > cooker.settings.duration;
 
   function heating(onoff) {
-    current.heating = onoff;
-    current.timestamps.heating = now;
+    cooker.heating = onoff;
+    cooker.timestamps.heating = now;
   }
 
   function toCooling() {
-    current.state = COOLING;
-    current.timestamps.cooling = now;
+    cooker.state = COOLING;
+    cooker.timestamps.cooling = now;
   }
 
   function toWarming() {
-    current.state = STATE.WARMING;
-    current.timestamps.warming = now;
+    cooker.state = STATE.WARMING;
+    cooker.timestamps.warming = now;
     heating(true);
   }
 
   function toReady() {
-    current.state = STATE.READY;
-    current.timestamps.ready = now;
+    cooker.state = STATE.READY;
+    cooker.timestamps.ready = now;
     heating(false);
   }
 
   function toCooking() {
-    current.state = STATE.COOKING;
-    current.timestamps.cooking = now;
+    cooker.state = STATE.COOKING;
+    cooker.timestamps.cooking = now;
   }
 
   function toCooling() {
-    current.state = STATE.COOLING;
-    current.timestamps.cooling = now;
+    cooker.state = STATE.COOLING;
+    cooker.timestamps.cooling = now;
     heating(false);
   }
 
   function toOff() {
-    current.state = STATE.OFF;
-    current.timestamps.end = now;
+    cooker.state = STATE.OFF;
+    cooker.timestamps.end = now;
   }
 
-  switch (current.state) {
+  switch (cooker.state) {
     case STATE.START_WARMING:
       toWarming();
       break;
@@ -110,7 +83,7 @@ async function mainLoop(current) {
         break;
       }
 
-      if (!current.heating && isBelowTemp) {
+      if (!cooker.heating && isBelowTemp) {
         if (isRelayCool) {
           heating(true);
         } else {
@@ -119,7 +92,7 @@ async function mainLoop(current) {
         break;
       }
 
-      if (current.heating && isAboveTemp) {
+      if (cooker.heating && isAboveTemp) {
         heating(false);
       }
 
@@ -133,43 +106,39 @@ async function mainLoop(current) {
       }
       break;
     case STATE.OFF:
-      if (current._intervalId) {
-        clearInterval(current._intervalId);
+      if (cooker._intervalId) {
+        clearInterval(cooker._intervalId);
       }
       break;
   }
 
-  if (previous.state !== current.state) {
-    suveLog(`Changed from ${previous.tate} to ${current.state}`)
+  if (previous.state !== cooker.state) {
+    suveLog(`Changed from ${previous.tate} to ${cooker.state}`)
   }
 
-  if (previous.heating !== current.heating) {
-    suveLog(`Changed heating from ${previous.heating} to ${current.heating}`)
+  if (previous.heating !== cooker.heating) {
+    suveLog(`Changed heating from ${previous.heating} to ${cooker.heating}`)
   }
 
-  const cookerUpdate = Object.assign({}, current);
+  const cookerUpdate = Object.assign({}, cooker);
   delete cookerUpdate._intervalId;
   websockets.sendMessage('cooker_update', cookerUpdate);
 }
 
-const sensors = [
-  { name: 'Sensor 1', id: 'sensor1', ...DEFAULT_SENSOR },
-];
-
-function sensorMiddleware() {
+function cookerMiddleware() {
   return function (req, res, next) {
-    const sensorId = req.params.id;
-    const sensor = sensors[sensorId];
-    if (!sensor) {
-      return res.status(404).send({ error: true, message: `Sensor not found: ${sensorId}` });
+    const cookerId = +(req.params.id) - 1;
+    const cooker = cookers[cookerId];
+    if (!cooker) {
+      return res.status(404).send({ error: true, message: `Cooker not found: ${cookerId}` });
     }
-    req.sensor = sensor;
+    req.cooker = cooker;
     next();
   }
 }
 
-const getAll = (req, res) => res.send(sensors);
-const getById = (req, res) => res.send(req.sensor);
+const getAll = (req, res) => res.send(cookers);
+const getById = (req, res) => res.send(req.cooker);
 
 function turnOn(req, res) {
   const { duration, temperature } = req.body;
@@ -177,75 +146,75 @@ function turnOn(req, res) {
     return res.status(400).send({ error: true, message: 'Bad Request: body.duration and body.temperature are required.' });
   }
 
-  const sensor = req.sensor;
-  if (sensor.state !== STATE.OFF) {
-    return res.status(400).send({ error: true, message: 'Bad Request: sensor is not stopped' });
+  const cooker = req.cooker;
+  if (cooker.state !== STATE.OFF) {
+    return res.status(400).send({ error: true, message: 'Bad Request: cooker is not stopped' });
   }
 
-  sensor.settings = { temperature, duration, minTemperature: temperature - config.TEMPERATURE_THRESHOLD }
-  sensor.state = STATE.START_WARMING;
+  cooker.settings = { temperature, duration, minTemperature: temperature - config.TEMPERATURE_THRESHOLD }
+  cooker.state = STATE.START_WARMING;
 
-  if (!sensor._intervalId) {
-    sensor._intervalId = setInterval(async () => {
+  if (!cooker._intervalId) {
+    cooker._intervalId = setInterval(async () => {
       try {
-        await mainLoop(sensor)
+        await mainLoop(cooker)
       } catch (error) {
         console.error('Problem with sous-vide main loop, aborting.');
         console.error(error);
-        clearInterval(sensor._intervalId);
+        clearInterval(cooker._intervalId);
       }
     }, config.LOOP_INTERVAL * 1000);
   }
 
-  sendUpdate(sensor);
+  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
 function turnOff(req, res) {
-  const sensor = req.sensor;
-  sensor.state = STATE.START_COOLING;
-  Object.assign(sensor.settings, DEFAULT_SENSOR.settings);
-  sendUpdate(sensor);
+  const cooker = req.cooker;
+  cooker.state = STATE.START_COOLING;
+  Object.assign(cooker.settings, DEFAULT_COOKER.settings);
+  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
 function pause(req, res) {
-  const sensor = req.sensor;
+  const cooker = req.cooker;
   if (this._intervalId) {
     clearInterval(this._intervalId);
   }
-  sendUpdate(sensor);
+  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
 function resume(req, res) {
-  const sensor = req.sensor;
+  const cooker = req.cooker;
   if (!this._intervalId) {
-    sensor._intervalId = setTimeout()
+    cooker._intervalId = setTimeout()
   }
-  sendUpdate(sensor);
+  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
 function startCooking(req, res) {
-  const sensor = req.sensor;
-  sensor.state = STATE.START_COOKING;
-  sendUpdate(sensor);
+  const cooker = req.cooker;
+  cooker.state = STATE.START_COOKING;
+  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
-function sendUpdate(sensor) {
-  const clean = { ...sensor };
+function sendUpdate(cooker) {
+  const clean = { ...cooker };
   delete clean._intervalId;
   websockets.sendMessage('cooker_update', clean);
 }
 
 function suveLog(message) {
-  console.log('SOUS>' + message);
+  console.log('cooker>' + message);
 }
 
 module.exports = {
-  sensorMiddleware,
+  cookerMiddleware,
   getAll,
   getById,
   turnOn,

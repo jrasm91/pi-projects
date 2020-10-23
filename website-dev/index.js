@@ -4,6 +4,7 @@ const app = new Vue({
     update: 1,
     page: 2,
     cooker: {
+      name: 'N/A',
       lastUpdate: null,
       state: 'N/A',
       temperature: '--',
@@ -64,19 +65,19 @@ const app = new Vue({
   },
   methods: {
     turnOn: function () {
-      callAPI('/api/sous-vide/sensors/0/turnOn', { temperature: 150, duration: 600 });
+      callAPI('/api/sous-vide/cookers/1/turnOn', { temperature: 150, duration: 600 });
     },
     turnOff: function () {
-      callAPI('/api/sous-vide/sensors/0/turnOff');
+      callAPI('/api/sous-vide/cookers/1/turnOff');
     },
     pause: function () {
-      callAPI('/api/sous-vide/sensors/0/pause');
+      callAPI('/api/sous-vide/cookers/1/pause');
     },
     resume: function () {
-      callAPI('/api/sous-vide/sensors/0/resume');
+      callAPI('/api/sous-vide/cookers/1/resume');
     },
     startCooking: function () {
-      callAPI('/api/sous-vide/sensors/0/start-cooking');
+      callAPI('/api/sous-vide/cookers/1/start-cooking');
     }
   }
 });

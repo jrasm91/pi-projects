@@ -14,13 +14,13 @@ api.get('/pool/history', pool.getHistory);
 api.get('/air/temperature', air.getTemperature);
 api.get('/air/history', air.getHistory);
 
-api.get('/sous-vide/sensors', sv.getAll);
-api.get('/sous-vide/sensors/:id', sv.sensorMiddleware(), sv.getById);
-api.post('/sous-vide/sensors/:id/turnOn', sv.sensorMiddleware(), sv.turnOn);
-api.post('/sous-vide/sensors/:id/turnOff', sv.sensorMiddleware(), sv.turnOff);
-api.post('/sous-vide/sensors/:id/pause', sv.sensorMiddleware(), sv.pause);
-api.post('/sous-vide/sensors/:id/resume', sv.sensorMiddleware(), sv.resume);
-api.post('/sous-vide/sensors/:id/start-cooking', sv.sensorMiddleware(), sv.startCooking);
+api.get('/sous-vide/cookers', sv.getAll);
+api.get('/sous-vide/cookers/:id', sv.cookerMiddleware(), sv.getById);
+api.post('/sous-vide/cookers/:id/turnOn', sv.cookerMiddleware(), sv.turnOn);
+api.post('/sous-vide/cookers/:id/turnOff', sv.cookerMiddleware(), sv.turnOff);
+api.post('/sous-vide/cookers/:id/pause', sv.cookerMiddleware(), sv.pause);
+api.post('/sous-vide/cookers/:id/resume', sv.cookerMiddleware(), sv.resume);
+api.post('/sous-vide/cookers/:id/start-cooking', sv.cookerMiddleware(), sv.startCooking);
 
 // Zones
 api.get('/zones', zones.getAll);
