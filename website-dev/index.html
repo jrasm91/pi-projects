@@ -17,17 +17,9 @@
         <section v-if="page === 1">
           <article>
             <div class="card">
-              <div class="card-header">Pool</div>
+              <div class="card-header">Debug</div>
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                  card's
-                  content.</p>
-              </div>
-              <div class="card-footer">
-                <div class="footer-buttons d-flex justify-content-even">
-                  <button class="btn btn-success">Placeholder</button>
-                </div>
+                <pre>{{ cooker }}</pre>
               </div>
             </div>
           </article>
@@ -35,6 +27,7 @@
         <section v-if="page === 2">
           <article>
             <div class="card">
+              <div class="card-header">{{ cooker.name }}</div>
               <div class="card-body">
                 <div class="d-flex justify-content-between">
                   <div class="text-center">
@@ -58,7 +51,7 @@
                 </h1>
                 <h4 class="text-center">{{ stateTimeAgo }}</h4>
                 <hr>
-                <h4>Cook at {{ cooker.settings.temperature }}° for {{ cooker.settings.duration }} (seconds)</h4>
+                <h4>Cook at {{ cooker.settings.temperature }}° for {{ cooker.settings.duration }}sec</h4>
                 <div class="d-flex justify-content-between">
                   <span></span>
                   <span class="text-muted">Last Updated: {{ cooker?.lastUpdated | time }}</span>
@@ -70,7 +63,7 @@
                   <button class="btn btn-danger" @click="turnOff()">Off</button>
                   <!-- <button class="btn" @click="pause()">Pause</button> -->
                   <!-- <button class="btn" @click="resume()">Resume</button> -->
-                  <button class="btn btn-success" @click="startCooking()">Start Cooking</button>
+                  <button class="btn btn-info" @click="startCooking()">Start Cooking</button>
                 </div>
               </div>
             </div>
@@ -84,7 +77,7 @@
           <span>Sous Vide</span>
         </li>
         <li class="list-group-item" @click="page = 1" v-bind:class="{ active: page === 1 }">
-          <span>Pool</span>
+          <span>Debug</span>
         </li>
       </ul>
     </div>
