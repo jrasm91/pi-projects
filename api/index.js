@@ -15,9 +15,11 @@ api.get('/air/temperature', air.getTemperature);
 api.get('/air/history', air.getHistory);
 
 api.get('/sous-vide/sensors', sv.getAll);
-api.get('/sous-vide/sensors/:id', sv.getById);
-api.post('/sous-vide/sensors/:id/start', sv.start);
-api.post('/sous-vide/sensors/:id/stop', sv.stop);
+api.get('/sous-vide/sensors/:id', sv.sensorMiddleware(), sv.getById);
+api.post('/sous-vide/sensors/:id/start', sv.sensorMiddleware(), sv.start);
+api.post('/sous-vide/sensors/:id/stop', sv.sensorMiddleware(), sv.stop);
+api.post('/sous-vide/sensors/:id/pause', sv.sensorMiddleware(), sv.pause);
+api.post('/sous-vide/sensors/:id/resume', sv.sensorMiddleware(), sv.resume);
 
 // Zones
 api.get('/zones', zones.getAll);

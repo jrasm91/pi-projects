@@ -2,6 +2,7 @@ const _ = require('lodash');
 const commands = require('./commands');
 const config = require('./config');
 const { dateDiff } = require('./helper');
+const websockets = require('./websockets');
 
 const STATE = {
   OFF: 'OFF',
@@ -10,13 +11,14 @@ const STATE = {
   READY: 'READY',
   START_COOKING: 'START_COOKING',
   COOKING: 'COOKING',
+  START_COOLING: 'START_COOLING',
   COOLING: 'COOLING',
 }
 
 const DEFAULT_SENSOR = {
   timestamps: {
     heating: null,
-    off: null,
+    off: new Date(),
     warming: null,
     ready: null,
     cooking: null,
@@ -29,16 +31,12 @@ const DEFAULT_SENSOR = {
   settings: {
     duration: null,
     temperature: null,
-    minTemperature: null,
   },
-
-  history: [],
   _intervalId: null,
 };
 
-
 // Main decision loop for sous vide cooker
-async function run(current) {
+async function mainLoop(current) {
   const previous = _.cloneDeep(current);
 
   suveLog(`Starting ${current.name}/${current.id}`);
@@ -55,39 +53,66 @@ async function run(current) {
   const isDoneCooling = dateDiff(now, current.timestamps.heating) > config.MIN_HEATING_COOLDOWN;
   const isDoneCooking = current.timestamps.cooking && dateDiff(now, current.timestamps.cooking) > current.settings.duration;
 
+  function heating(onoff) {
+    current.heating = onoff;
+    current.timestamps.heating = now;
+  }
+
+  function toCooling() {
+    current.state = COOLING;
+    current.timestamps.cooling = now;
+  }
+
+  function toWarming() {
+    current.state = STATE.WARMING;
+    current.timestamps.warming = now;
+    heating(true);
+  }
+
+  function toReady() {
+    current.state = STATE.READY;
+    current.timestamps.ready = now;
+    heating(false);
+  }
+
+  function toCooking() {
+    current.state = STATE.COOKING;
+    current.timestamps.cooking = now;
+  }
+
+  function toCooling() {
+    current.state = STATE.COOLING;
+    current.timestamps.cooling = now;
+    heating(false);
+  }
+
+  function toOff() {
+    current.state = STATE.OFF;
+    current.timestamps.end = now;
+  }
+
   switch (current.state) {
     case STATE.START_WARMING:
-      current.state = STATE.WARMING;
-      current.timestamps.warming = now;
-      current.heating = true;
-      current.heating = now;
+      toWarming();
       break;
     case STATE.WARMING:
       if (isAboveTemp) {
-        current.state = STATE.READY;
-        current.timestamps.ready = now;
-        current.heating = false;
-        current.heating = now;
+        toReady();
       }
       break;
     case STATE.START_COOKING:
-      current.state = STATE.COOKING;
-      current.timestamps.cooking = now;
+      toCooking();
       break;
     case STATE.READY:
     case STATE.COOKING:
       if (isDoneCooking) {
-        current.state = STATE.COOLING;
-        current.timestamps.cooling = now;
-        current.heating = false;
-        current.heating = now;
+        toCooling();
         break;
       }
 
       if (!current.heating && isBelowTemp) {
         if (isDoneCooling) {
-          current.heating = true;
-          current.heating = now;
+          heating(true);
         } else {
           suveLog(`Needs heat, but hasn't met cooldown period.`);
         }
@@ -95,15 +120,16 @@ async function run(current) {
       }
 
       if (current.heating && isAboveTemp) {
-        current.heating = false;
-        current.heating = now;
+        heating(false);
       }
 
       break;
+    case STATE.START_COOLING:
+      toCooling();
+      break;
     case STATE.COOLING:
       if (isBelowSafeTemp) {
-        current.timestamps.end = now;
-        current.state = STATE.OFF;
+        toOff();
       }
       break;
     case STATE.OFF:
@@ -114,70 +140,110 @@ async function run(current) {
   }
 
   if (previous.state !== current.state) {
-    suveLog(`Changed from ${previousState} to ${current.state}`)
+    suveLog(`Changed from ${previous.tate} to ${current.state}`)
   }
 
   if (previous.heating !== current.heating) {
-    suveLog(`Changed heating from ${previousState} to ${current.state}`)
+    suveLog(`Changed heating from ${previous.heating} to ${current.heating}`)
+  }
+
+  const cookerUpdate = Object.assign({}, current);
+  delete cookerUpdate._intervalId;
+  websockets.sendMessage('cooker_update', cookerUpdate);
+}
+
+const sensors = [
+  { name: 'Sensor 1', id: 'sensor1', ...DEFAULT_SENSOR },
+];
+
+function sensorMiddleware() {
+  return function (req, res, next) {
+    const sensorId = req.params.id;
+    const sensor = sensors[sensorId];
+    if (!sensor) {
+      return res.status(404).send({ error: true, message: `Sensor not found: ${sensorId}` });
+    }
+    req.sensor = sensor;
+    next();
   }
 }
 
-const sensors = {
-  sensor1: { name: 'Sensor 1', id: 'sensor1', ...DEFAULT_SENSOR },
-  sensor2: { name: 'Sensor 2', id: 'sensor2', ...DEFAULT_SENSOR },
-  sensor3: { name: 'Sensor 3', id: 'sensor3', ...DEFAULT_SENSOR },
-};
-
-function getAll(req, res) {
-  return res.send(Object.values(sensors));
-}
-
-function getById(req, res) {
-  const sensorId = req.params.id;
-  const sensor = sensors[sensorId];
-  if (!sensor) {
-    return res.status(404).send({ error: true, message: `Sensor not found: ${sensorId}` });
-  }
-  return res.send(sensor);
-}
+const getAll = (req, res) => res.send(sensors);
+const getById = (req, res) => res.send(req.sensor);
 
 function start(req, res) {
-  const sensorId = req.params.id;
-  const sensor = sensors[sensorId];
-  if (!sensor) {
-    return res.status(404).send({ error: true, message: `Sensor not found: ${sensorId}` });
-  }
-
   const { duration, temperature } = req.body;
-
   if (!duration || !temperature) {
     return res.status(400).send({ error: true, message: 'Bad Request: body.duration and body.temperature are required.' });
   }
 
-  sensor.settings.duration = duration;
-  sensor.settings.temperature = temperature;
-  sensor.settings.minTemperature = temperature - config.TEMPERATURE_THRESHOLD;
-  sensor.state = STATE.STARTING;
+  const sensor = req.sensor;
+  if (sensor.state !== STATE.OFF) {
+    return res.status(400).send({ error: true, message: 'Bad Request: sensor is not stopped' });
+  }
 
-  sensor._intervalId = setInterval(() => run(sensor), 1000);
+  sensor.settings = { temperature, duration, minTemperature: temperature - config.TEMPERATURE_THRESHOLD }
+  sensor.state = STATE.START_WARMING;
+  sendUpdate(sensor);
+
+  if (!sensor._intervalId) {
+    sensor._intervalId = setInterval(async () => {
+      try {
+        await mainLoop(sensor)
+      } catch (error) {
+        console.error('Problem with sous-vide main loop, aborting.');
+        console.error(error);
+        clearInterval(sensor._intervalId);
+      }
+    }, config.LOOP_INTERVAL * 1000);
+  }
+
   return res.send({ message: 'Started sensor' });
 }
 
 function stop(req, res) {
-  const sensorId = req.params.id;
-  const sensor = sensors[sensorId];
-  if (!sensor) {
-    return res.status(404).send({ error: true, message: `Sensor not found: ${sensorId}` });
-  }
+  const sensor = req.sensor;
+  sensor.state = STATE.START_COOLING;
+  Object.assign(sensor.settings, DEFAULT_SENSOR.settings);
+  res.sendStatus(201);
+  sendUpdate(sensor);
+}
 
-  if (sensor._intervalId) {
-    clearInterval(sensor._intervalId);
+function pause(req, res) {
+  const sensor = req.sensor;
+  if (this._intervalId) {
+    clearInterval(this._intervalId);
   }
+  sendUpdate(sensor);
+  res.sendStatus(201);
+}
+
+function resume(req, res) {
+  const sensor = req.sensor;
+  if (!this._intervalId) {
+    sensor._intervalId = setTimeout()
+  }
+  sendUpdate(sensor);
+  res.sendStatus(201);
+}
+
+function sendUpdate(sensor) {
+  const clean = { ...sensor };
+  delete clean._intervalId;
+  websockets.sendMessage('cooker_update', clean);
 }
 
 function suveLog(message) {
-  console.log('RUN>' + message);
+  console.log('SOUS>' + message);
 }
 
-module.exports = { getAll, getById, start, stop };
+module.exports = {
+  sensorMiddleware,
+  getAll,
+  getById,
+  start,
+  stop,
+  pause,
+  resume,
+};
 

@@ -5,6 +5,7 @@ const config = {
   MIN_HEATING_COOLDOWN: 60, // in seconds
   COOLING_DURATION: 180, // in seconds
   SAFE_TEMPERATURE: 100, // in degrees
+  LOOP_INTERVAL: 5, // in seconds
 };
 
 module.exports = config;
