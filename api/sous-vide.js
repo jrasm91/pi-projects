@@ -23,6 +23,13 @@ cookers.forEach((cooker) => {
   Object.assign(cooker, { _gpio, ...DEFAULT_COOKER });
 });
 
+setInterval(() => {
+  const clean = { ...config.cookers[0] };
+  delete clean._intervalId;
+  delete clean._gpio;
+  websockets.sendMessage('cooker_update', clean);
+}, 1000);
+
 // Main decision loop for sous vide cooker
 async function mainLoop(cooker) {
   const previous = _.cloneDeep(cooker);
@@ -133,10 +140,6 @@ async function mainLoop(cooker) {
     await cooker._gpio.write(cooker.heating ? 1 : 0);
     suveLog(`Changed heating from ${previous.heating} to ${cooker.heating}`)
   }
-
-  const cookerUpdate = Object.assign({}, cooker);
-  delete cookerUpdate._intervalId;
-  websockets.sendMessage('cooker_update', cookerUpdate);
 }
 
 function cookerMiddleware() {
@@ -181,7 +184,6 @@ function turnOn(req, res) {
     }, config.LOOP_INTERVAL * 1000);
   }
 
-  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
@@ -189,7 +191,6 @@ function turnOff(req, res) {
   const cooker = req.cooker;
   cooker.state = STATE.START_COOLING;
   Object.assign(cooker.settings, DEFAULT_COOKER.settings);
-  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
@@ -198,7 +199,6 @@ function pause(req, res) {
   if (this._intervalId) {
     clearInterval(this._intervalId);
   }
-  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
@@ -207,22 +207,13 @@ function resume(req, res) {
   if (!this._intervalId) {
     cooker._intervalId = setTimeout()
   }
-  sendUpdate(cooker);
   return res.sendStatus(201);
 }
 
 function startCooking(req, res) {
   const cooker = req.cooker;
   cooker.state = STATE.START_COOKING;
-  sendUpdate(cooker);
   return res.sendStatus(201);
-}
-
-function sendUpdate(cooker) {
-  const clean = { ...cooker };
-  delete clean._intervalId;
-  delete clean._gpio;
-  websockets.sendMessage('cooker_update', clean);
 }
 
 function suveLog(message) {
