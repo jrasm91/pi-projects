@@ -4,8 +4,8 @@ const config = {
 
   MAX_TEMPERATURE_DROP: 3, // in degrees
   MIN_HEATING_COOLDOWN: 60, // in seconds
-  COOLING_DURATION: 180, // in seconds
-  SAFE_TEMPERATURE: 100, // in degrees
+  COOLING_DURATION: 15, // in seconds
+  SAFE_TEMPERATURE: 85, // in degrees
   LOOP_INTERVAL: 5, // in seconds,
 
   cookers: [

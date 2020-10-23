@@ -3,8 +3,8 @@ const app = new Vue({
   data: {
     update: 1,
     page: 2,
-    inputTemperature: 150,
-    inputDuration: 600,
+    inputTemperature: 95,
+    inputDuration: 10,
     cooker: {
       name: 'N/A',
       lastUpdate: null,
