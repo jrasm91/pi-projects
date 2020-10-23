@@ -133,8 +133,8 @@ async function mainLoop(current) {
       }
       break;
     case STATE.OFF:
-      if (sensor._intervalId) {
-        clearInterval(sensor._intervalId);
+      if (current._intervalId) {
+        clearInterval(current._intervalId);
       }
       break;
   }
