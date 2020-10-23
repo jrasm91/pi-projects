@@ -32,7 +32,7 @@ async function mainLoop(cooker) {
   }
 
   function toCooling() {
-    cooker.state = COOLING;
+    cooker.state = STATE.COOLING;
     cooker.timestamps.cooling = now;
   }
 

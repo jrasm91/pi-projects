@@ -3,6 +3,8 @@ const app = new Vue({
   data: {
     update: 1,
     page: 2,
+    inputTemperature: 150,
+    inputDuration: 600,
     cooker: {
       name: 'N/A',
       lastUpdate: null,
@@ -65,7 +67,7 @@ const app = new Vue({
   },
   methods: {
     turnOn: function () {
-      callAPI('/api/sous-vide/cookers/1/turnOn', { temperature: 150, duration: 600 });
+      callAPI('/api/sous-vide/cookers/1/turnOn', { temperature: this.inputTemperature, duration: this.inputDuration });
     },
     turnOff: function () {
       callAPI('/api/sous-vide/cookers/1/turnOff');

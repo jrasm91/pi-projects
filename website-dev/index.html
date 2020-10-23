@@ -27,34 +27,49 @@
         <section v-if="page === 2">
           <article>
             <div class="card">
-              <div class="card-header">{{ cooker.name }}</div>
+              <div class="card-header d-flex justify-content-between">
+                <span>{{ cooker.name }}</span>
+                <span class="text-muted">Last Updated: {{ cooker?.lastUpdated | time }}</span>
+              </div>
               <div class="card-body">
                 <div class="d-flex justify-content-between">
                   <div class="text-center">
-                    <h1 class="font-weight-bold">
+                    <h2 class="font-weight-bold">
                       <i class="fa text-danger" :class="temperatureIcon"></i>
                       <span>{{ cooker.temperature }}°</span>
                       <span class="font-size-smaller" v-if="cooker.settings.temperature">/
                         {{ cooker.settings.temperature }}°</span>
-                    </h1>
+                    </h2>
                   </div>
                   <div class="text-center">
-                    <h1>
+                    <h2>
                       <i class="fa fa-fire" :class="heatingClass"></i>
                       <span class="font-weight-bold">{{ cooker.heating | heatingLabel }}</span>
-                    </h1>
+                    </h2>
                   </div>
                 </div>
                 <hr>
-                <h1 class="text-center">
-                  <span class="font-weight-bold" :class="stateClass">{{ cooker.state }}</span>
-                </h1>
-                <h4 class="text-center">{{ stateTimeAgo }}</h4>
+                <div class="text-center">
+                  <h4>Cook at {{ cooker.settings.temperature }}° for {{ cooker.settings.duration }}s
+                  </h4>
+                  <h1>
+                    <span class="font-weight-bold" :class="stateClass">{{ cooker.state }}</span>
+                  </h1>
+                  <p class="text-muted">{{ stateTimeAgo }}</p>
+
+                </div>
                 <hr>
-                <h4>Cook at {{ cooker.settings.temperature }}° for {{ cooker.settings.duration }}sec</h4>
-                <div class="d-flex justify-content-between">
-                  <span></span>
-                  <span class="text-muted">Last Updated: {{ cooker?.lastUpdated | time }}</span>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="">Temperature</label>
+                      <input type="text" class="form-control" v-model="inputTemperature">
+                    </div>
+                    <div class="col-6">
+                      <label for="">Duration (seconds)</label>
+                      <input type="text" class="form-control" v-model="inputDuration">
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="card-footer p-0">
