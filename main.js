@@ -4,7 +4,7 @@ const http = require('http');
 const morgan = require('morgan');
 
 const api = require('./api');
-const config = require('./api/config');
+const helper = require('./api/helper');
 const websockets = require('./api/websockets');
 
 const port = process.env.PORT || 4201;
@@ -31,12 +31,7 @@ process.on('SIGUSR2', () => process.exit());
 process.on('exit', exitHandler);
 
 function exitHandler() {
-  console.log('Cleaning up GPIO');
-  for (const cooker of config.cookers) {
-    if (cooker._gpio) {
-      cooker._gpio.writeSync(0);
-      cooker._gpio.unexport();
-    }
-  }
+  console.log('\nCleaning up GPIO');
+  helper.cleanupGPIOs();
   process.exit();
 }

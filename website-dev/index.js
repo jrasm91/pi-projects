@@ -6,41 +6,38 @@ const app = new Vue({
     inputTemperature: 95,
     inputDuration: 10,
     cooker: {
-      name: 'N/A',
-      lastUpdate: null,
-      state: 'N/A',
+      name: '--',
+      sensorId: '--',
+      relayId: '--',
       temperature: '--',
-      heating: null,
-      settings: { temperature: '--', duration: '--' },
+      lastUpdate: null,
+      relayOn: null,
+      relayStart: null,
+      relayDelayed: 0,
+      state: '--',
+      stateStart: null,
+      events: [],
+      settings: { duration: '--', temperature: '--' },
     },
   },
   computed: {
     stateTimeAgo: function () {
       // This line causes the computed value to get updated every second
       const updateCount = this.update;
-      switch (this.cooker.state) {
-        case 'N/A':
-          return '';
-        case 'WARMING':
-          return timeAgo(this.cooker.timestamps.warming);
-        case 'READY':
-          return timeAgo(this.cooker.timestamps.ready);
-        case 'COOKING':
-          return timeAgo(this.cooker.timestamps.cooking);
-        case 'COOLING':
-          return timeAgo(this.cooker.timestamps.cooling);
-        default:
-          return timeAgo(this.cooker.timestamps.off);
-      }
+      return timeAgo(this.cooker.stateStart);
     },
     stateClass: function () {
       switch (this.cooker.state) {
-        case 'WARMING':
+        case 'OFF':
+          return 'text-default';
+        case 'PREHEATING':
           return 'text-warning';
         case 'READY':
           return 'text-success';
         case 'COOKING':
           return 'text-danger';
+        case 'WARMING':
+          return 'text-warning';
         case 'COOLING':
           return 'text-info';
         default:
@@ -48,7 +45,7 @@ const app = new Vue({
       }
     },
     heatingClass: function () {
-      return this.cooker.heating ? 'text-danger' : '';
+      return this.cooker.relayOn ? 'text-danger' : '';
     },
     temperatureIcon: function () {
       const temperature = this.cooker.temperature;
@@ -69,18 +66,12 @@ const app = new Vue({
     turnOn: function () {
       callAPI('/api/sous-vide/cookers/1/turnOn', { temperature: this.inputTemperature, duration: this.inputDuration });
     },
+    startCooking: function () {
+      callAPI('/api/sous-vide/cookers/1/start-cooking');
+    },
     turnOff: function () {
       callAPI('/api/sous-vide/cookers/1/turnOff');
     },
-    pause: function () {
-      callAPI('/api/sous-vide/cookers/1/pause');
-    },
-    resume: function () {
-      callAPI('/api/sous-vide/cookers/1/resume');
-    },
-    startCooking: function () {
-      callAPI('/api/sous-vide/cookers/1/start-cooking');
-    }
   }
 });
 
@@ -92,7 +83,7 @@ socket.on('cooker_update', cooker => {
 
 const timer = setInterval(() => {
   app.update += 1;
-}, 1000);
+}, 5000);
 
 /* --------------- Helper Functions ------------------- */
 function callAPI(url, data, method) {
@@ -139,7 +130,7 @@ function timeAgo(time) {
 
   for (const [threshold, label, exact] of timeFormats) {
     if (seconds < threshold) {
-      return `${Math.floor(seconds / exact)} ${label} ago`;
+      return `${Math.floor(seconds / exact)} ${label}`;
     }
   }
   return time;
