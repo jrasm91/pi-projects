@@ -1,0 +1,111 @@
+This document describes the states, errors and decision logic
+
+Inputs from USER App
+App should display 
+Always
+    [Su-vee card] might be more discriptive Red, Blue, Green) match outlet with proble
+    [Time card] Last updated time 
+    [Water Temp card] should display current water temperature 
+
+Init_state
+    Display [Cook fir s @ card] should be blank
+    Display [Current State card] should be blank
+    Display [2 hours ago card]  should be blank
+    Display [Cooking card] Just a label for the 2 lower cards
+    User Input [Temperature card] - initialized light gray "enter temperature"
+    User Input [Duration card]  initialized light gray "duration minutes"
+    User Button [Clear card] What is now ON should be Clear to restart this webapge  
+    User Button [Reset CARD] was Off -- returns default webpage 
+    User Button [Enter card] What is currently Start Cooking button records temp & duration 
+    
+
+Warming_state    
+    Display [Cook fir s @ card] should display the Cook Temperature and Duration
+    Display [Current State card] should be Warming
+    Display [2 hours ago card]  time since Warming_state
+    Blank   [Cooking card] should be blank
+    Blank [Temperature card] - should be blank
+    Blank [Duration card]  should be blank
+    Blank [Clear card] should be blank 
+    User Button [Off card] Stops the process - goes to Cooling_state
+    Blank [Enter card] should be blank
+
+Ready_state    
+    Display [Cook fir s @ card] should display the Cook Temperature and Duration
+    Display [Current State card] should be Ready
+    Display [2 hours ago card]  Time since entered Ready_state
+    Blank [Cooking card] should be blank
+    Blank [Temperature card] - should be blank
+    Blank [Duration card]  should be blank
+    Blank [Clear card] should be blank 
+    User Button [Off CARD] Stops the process - goes to Cooling_state
+    User Button [Start Cooking] was Enter in Init_state 
+
+Cooking_state    
+    Display [Cook fir s @ card] should display the Cook Temperature and Duration
+    Display [Current State card] should be Cooking
+    Display [2 hours ago card]  Time since entered Cook_state
+    Blank [Cooking card] should be blank
+    Blank [Temperature card] - should be blank
+    Blank [Duration card]  should be blank
+    Blank [Clear card] should be blank 
+    User Button [OFF CARD] Stops process - goes to Cooling_state
+    Blank [Start Cooking] was Enter in Init_state - should be blank
+
+Done_state    
+    Display [Cook fir s @ card] should display the Cook Temperature and Duration
+    Display [Current State card] should be Done 
+    Display [2 hours ago card]  Time since entered Done_state
+    Blank [Cooking card] 
+    Display [Temperature card] 
+    User Input [Duration card]  should be blank
+    Blank [Clear card] should be blank 
+    Blank [OFF CARD] goes to Cooling_state
+    Blank [Start Cooking] was Enter in Init_state - should be blank
+
+Cooling_state    
+    Display [Cook fir s @ card] should display the Cook Temperature and Duration
+    Display [Current State card] should be Cooling_state 
+    Display [2 hours ago card]  Time since entered Cooling_state
+    Blank [Cooking card] should be blank
+    Blank [Temperature card] - should be blank
+    Blank [Duration card]  should be blank
+    Blank [Clear card] should be blank 
+    Blank [OFF CARD] should be blank
+    Blank [Start Cooking] was Enter in Init_state - should be blank
+
+Off_state    
+    Display [Cook fir s @ card] should blank
+    Display [Current State card] should be Off_state 
+    Display [2 hours ago card]  should blank
+    Blank [Cooking card] should be blank
+    Blank [Temperature card] - should be blank
+    Blank [Duration card]  should be blank
+    Blank [Clear card] should be blank 
+    Blank [OFF CARD] should be blank
+    Blank [Start Cooking] was Enter in Init_state - should be blank
+
+
+
+
+The control logic consists of 7 states.
+
+Init_state
+     Entry occurs when program initially started.
+        Wait for USER input 
+            
+Warming_state
+    If USER selects
+        "ON" should be disabled or changed to "REDO or START OVER"
+            "REDO" transistion to Init_state    
+        "OFF" transistion to Cooling_state            "START COOKING" should be disabled   
+    Not_warming_condiiton is "true" transistion to Error_state
+    When current_temp >= cooking_temp transistion Ready_state
+    
+    Stay in this state while current_temp < cooking_temp
+        
+Ready_state
+    IF USER 
+    Stays in this state until USER clicks "Start Cooking"
+        unless cooling_condition is detected
+    When 

@@ -1,6 +1,6 @@
-
+const rpio = require('rpio');
 const config = require('./config');
-const { dateDiff, bindGPIO } = require('./helper');
+const { dateDiff } = require('./helper');
 
 const STATE = {
   OFF: 'OFF',
@@ -16,7 +16,8 @@ class Cooker {
     this.name = name;
     this.sensorId = sensorId;
     this.relayId = relayId;
-    this._relay = bindGPIO(this.relayId);
+    
+    rpio.open(relayId, rpio.OUTPUT, rpio.HIGH);
     this.reset();
   }
 
@@ -50,7 +51,7 @@ class Cooker {
     this.nextState(STATE.COOLING);
   }
 
-  async update() {
+  update() {
     switch (this.state) {
       case STATE.OFF:
         break;
@@ -88,16 +89,16 @@ class Cooker {
       case STATE.COOKING:
       case STATE.WARMING:
         if (this.isUnderTemperature()) {
-          await this.turnOnRelay();
+        this.turnOnRelay();
         }
 
         if (this.isAtTemperature()) {
-          await this.turnOffRelay();
+        this.turnOffRelay();
         }
         break;
 
       default:
-        await this.turnOffRelay();
+        this.turnOffRelay();
     }
   }
 
@@ -109,7 +110,7 @@ class Cooker {
     this.stateStart = now;
   }
 
-  async turnOnRelay() {
+  turnOnRelay() {
     if (this.relayOn) {
       return;
     }
@@ -122,29 +123,22 @@ class Cooker {
       return;
     }
 
-    await this._relay.write(config.GPIO_ON);
+    rpio.write(this.relayId, rpio.LOW);
     this.relayOn = true;
     this.relayStart = new Date();
     console.log(`[Cooker] RELAY:${this.relayId} => Turned ON`);
   }
 
-  async turnOffRelay() {
+  turnOffRelay() {
     if (!this.relayOn) {
       return;
     }
-    await this._relay.write(config.GPIO_OFF);
+    await rpio.write(this.relayId, rpio.HIGH);
     this.relayOn = false;
     console.log(`[Cooker] RELAY:${this.relayId}  => Turned Off`);
   }
 
-  cleanup() {
-    if (this._relay) {
-      this._relay.writeSync(config.GPIO_OFF);
-      this._relay.unexport();
-    }
-  }
-
-  isDonePreHeating() {
+    isDonePreHeating() {
     return this.state === STATE.PREHEATING && this.isAtTemperature();
   }
 
@@ -166,7 +160,6 @@ class Cooker {
 
   export() {
     const clean = { ...this };
-    delete clean._relay;
     return clean;
   }
 }
