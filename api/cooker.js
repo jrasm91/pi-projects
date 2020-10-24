@@ -133,7 +133,7 @@ class Cooker {
     if (!this.relayOn) {
       return;
     }
-    await rpio.write(this.relayId, rpio.HIGH);
+    rpio.write(this.relayId, rpio.HIGH);
     this.relayOn = false;
     console.log(`[Cooker] RELAY:${this.relayId}  => Turned Off`);
   }
