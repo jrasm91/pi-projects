@@ -37,7 +37,7 @@ const turnOff = (req, res) => req.cooker.turnOff() && res.sendStatus(201);
 // Update temperature
 setInterval(async () => {
   for (const cooker of cookers) {
-    const { temperature } = await commands.getSensorTemp().catch(() => 213);
+    const { temperature } = await commands.getSensorTemp(cooker.sensorId).catch(() => 213);
     cooker.temperature = temperature;
     cooker.lastUpdated = new Date();
   }
