@@ -17,100 +17,100 @@ const app = new Vue({
       state: '--',
       stateStart: null,
       events: [],
-      settings: { duration: '--', temperature: '--' },
-    },
+      settings: { duration: '--', temperature: '--' }
+    }
   },
   computed: {
     stateTimeAgo: function () {
       // This line causes the computed value to get updated every second
-      const updateCount = this.update;
-      return timeAgo(this.cooker.stateStart);
+      const updateCount = this.update
+      return timeAgo(this.cooker.stateStart)
     },
     stateClass: function () {
       switch (this.cooker.state) {
         case 'OFF':
-          return 'text-default';
+          return 'text-default'
         case 'PREHEATING':
-          return 'text-warning';
+          return 'text-warning'
         case 'READY':
-          return 'text-success';
+          return 'text-success'
         case 'COOKING':
-          return 'text-danger';
+          return 'text-danger'
         case 'WARMING':
-          return 'text-warning';
+          return 'text-warning'
         case 'COOLING':
-          return 'text-info';
+          return 'text-info'
         default:
-          return '';
+          return ''
       }
     },
     heatingClass: function () {
-      return this.cooker.relayOn ? 'text-danger' : '';
+      return this.cooker.relayOn ? 'text-danger' : ''
     },
     temperatureIcon: function () {
-      const temperature = this.cooker.temperature;
+      const temperature = this.cooker.temperature
       if (temperature > 175) {
         return 'fa-thermometer-full'
       } else if (temperature > 150) {
-        return 'fa-thermometer-three-quarters';
+        return 'fa-thermometer-three-quarters'
       } else if (temperature > 125) {
-        return 'fa-thermometer-half';
+        return 'fa-thermometer-half'
       } else if (temperature > 100) {
-        return 'fa-thermometer-quarter';
+        return 'fa-thermometer-quarter'
       } else {
-        return 'fa-thermometer-empty';
+        return 'fa-thermometer-empty'
       }
-    },
+    }
   },
   methods: {
     turnOn: function () {
-      callAPI('/api/sous-vide/cookers/1/turnOn', { temperature: this.inputTemperature, duration: this.inputDuration });
+      callAPI('/api/sous-vide/cookers/1/turnOn', { temperature: this.inputTemperature, duration: this.inputDuration })
     },
     startCooking: function () {
-      callAPI('/api/sous-vide/cookers/1/start-cooking');
+      callAPI('/api/sous-vide/cookers/1/start-cooking')
     },
     turnOff: function () {
-      callAPI('/api/sous-vide/cookers/1/turnOff');
-    },
+      callAPI('/api/sous-vide/cookers/1/turnOff')
+    }
   }
-});
+})
 
-const socket = io();
+const socket = io()
 socket.on('cooker_update', cooker => {
-  console.log('cooker_update', cooker);
-  app.cooker = cooker;
+  console.log('cooker_update', cooker)
+  app.cooker = cooker
 })
 
 const timer = setInterval(() => {
-  app.update += 1;
-}, 5000);
+  app.update += 1
+}, 5000)
 
 /* --------------- Helper Functions ------------------- */
-function callAPI(url, data, method) {
+function callAPI (url, data, method) {
   return fetch(url, {
     method: method || 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
-  });
+  })
 }
 
-function timeAgo(time) {
+function timeAgo (time) {
   if (time === null) {
-    return 'N/A';
+    return 'N/A'
   }
   switch (typeof time) {
     case 'number':
-      break;
+      break
     case 'string':
-      time = +new Date(time);
-      break;
+      time = +new Date(time)
+      break
     case 'object':
       if (time.constructor === Date) {
-        time = time.getTime();
+        time = time.getTime()
       }
-      break;
+      break
     default:
-      time = +new Date();
+      time = +new Date()
   }
   const timeFormats = [
     [60, 'seconds', 1],
@@ -120,18 +120,18 @@ function timeAgo(time) {
     [2419200, 'weeks', 604800],
     [29030400, 'months', 2419200],
     [2903040000, 'years', 29030400],
-    [58060800000, 'centuries', 2903040000],
-  ];
+    [58060800000, 'centuries', 2903040000]
+  ]
 
-  let seconds = (+new Date() - time) / 1000;
+  const seconds = (+new Date() - time) / 1000
   if (seconds < 15) {
-    return 'Just now';
+    return 'Just now'
   }
 
   for (const [threshold, label, exact] of timeFormats) {
     if (seconds < threshold) {
-      return `${Math.floor(seconds / exact)} ${label}`;
+      return `${Math.floor(seconds / exact)} ${label}`
     }
   }
-  return time;
+  return time
 }

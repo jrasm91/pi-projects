@@ -13,14 +13,14 @@ const config = {
   intervals: {
     TEMP_UPDATE: 5, // in seconds
     WEB_UPDATE: 1, // in seconds,
-    MAIN_LOOP: 1, // in seconds
+    MAIN_LOOP: 1 // in seconds
   },
 
   cookers: [
-    { name: 'Cooker #1', sensorId: '28-00000976e714', relayId: 21, },
+    { name: 'Cooker #1', sensorId: '28-00000976e714', relayId: 21 }
     // { name: 'Cooker #2', sensorId: '28-0000096578cc', relayId: 20, },
     // { name: 'Cooker #3', sensorId: '28-000009763e8a', relayId: 26, },
-  ],
-};
+  ]
+}
 
-module.exports = config;
+module.exports = config

@@ -20,11 +20,29 @@
     "socketio": "^1.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "husky": "^4.3.0",
+    "nodemon": "^2.0.4",
+    "snazzy": "^8.0.0",
+    "standard": "^15.0.0"
   },
   "nodemonConfig": {
     "ignore": [
       "data/*"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "standard --fix | snazzy"
+    }
+  },
+  "standard": {
+    "ignore": [
+      "website-dev",
+      "poc"
+    ],
+    "global": [
+      "Vue",
+      "io"
     ]
   }
 }
