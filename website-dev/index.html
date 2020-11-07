@@ -16,7 +16,7 @@
       <div class="container mt-2">
         <section v-if="page === 1">
           <article>
-            <div class="card">
+            <div class="card mb-2" v-for="cooker of cookers" :key="cooker.cookerId">
               <div class="card-header">Debug</div>
               <div class="card-body">
                 <pre>{{ cooker }}</pre>
@@ -26,16 +26,16 @@
         </section>
         <section v-if="page === 2">
           <article>
-            <div class="card">
+            <div class="card mb-2" v-for="cooker of cookers" :key="cooker.cookerId">
               <div class="card-header d-flex justify-content-between">
-                <span>{{ cooker.name }}</span>
+                <span>{{ cooker.name }} <span class="font-size-smaller">/ {{ cooker.cookerId }}</span></span>
                 <span class="text-muted">Last Updated: {{ cooker.lastUpdated | time }}</span>
               </div>
               <div class="card-body">
                 <div class="d-flex justify-content-between">
                   <div class="text-center">
                     <h2 class="font-weight-bold">
-                      <i class="fa text-danger" :class="temperatureIcon"></i>
+                      <i class="fa text-danger" :class="cooker._temperatureIcon"></i>
                       <span>{{ cooker.temperature }}°</span>
                       <span class="font-size-smaller" v-if="cooker.settings.temperature">/
                         {{ cooker.settings.temperature }}°</span>
@@ -43,10 +43,10 @@
                   </div>
                   <div class="text-center">
                     <h2>
-                      <i class="fa fa-fire" :class="heatingClass"></i>
+                      <i class="fa fa-fire" :class="cooker._heatingClass"></i>
                       <span class="font-weight-bold">{{ cooker.relayOn | heatingLabel }}</span>
                     </h2>
-                    <p class="text-muted" v-if="cooker.relayOn && cooker.relayDelayed > 0">
+                    <p class="text-muted" v-if="!cooker.relayOn && cooker.relayDelayed > 0">
                       <span class="font-weight-bold">Delayed</span>
                       <span> {{ cooker.relayDelayed }}s</span>
                     </p>
@@ -61,32 +61,41 @@
                     <span class="font-weight-bold">{{ cooker.settings.temperature }}°</span>
                   </h4>
                   <h1>
-                    <span class="font-weight-bold" :class="stateClass">{{ cooker.state }}</span>
+                    <span class="font-weight-bold" :class="cooker._stateClass">{{ cooker.state }}</span>
                   </h1>
-                  <p class="text-muted">{{ stateTimeAgo }}</p>
+                  <p class="text-muted">{{ cooker._elapsedTime }}</p>
 
                 </div>
-                <hr>
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-6">
-                      <label for="">Temperature</label>
-                      <input type="text" class="form-control" v-model="inputTemperature">
-                    </div>
-                    <div class="col-6">
-                      <label for="">Duration (seconds)</label>
-                      <input type="text" class="form-control" v-model="inputDuration">
+                <div :hidden="cooker.state !== 'OFF' && cooker.state !== 'COOLING'">
+                  <hr>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="">Temperature</label>
+                        <input type="text" class="form-control" :id="cooker.cookerId + '-temperature'">
+                      </div>
+                      <div class="col-6">
+                        <label for="">Duration (seconds)</label>
+                        <input type="text" class="form-control" :id="cooker.cookerId + '-duration'">
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="card-footer p-0">
                 <div class="footer-buttons d-flex justify-content-even">
-                  <button class="btn btn-success" @click="turnOn()">On</button>
-                  <button class="btn btn-danger" @click="turnOff()">Off</button>
-                  <!-- <button class="btn" @click="pause()">Pause</button> -->
-                  <!-- <button class="btn" @click="resume()">Resume</button> -->
-                  <button class="btn btn-info" @click="startCooking()">Start Cooking</button>
+                  <button
+                    class="btn btn-success"
+                    v-if="cooker.state === 'OFF' || cooker.state === 'COOLING'"
+                    @click="turnOn(cooker)">On</button>
+                  <button
+                    class="btn btn-danger"
+                    v-if="cooker.state !== 'OFF' && cooker.state !== 'COOLING'"
+                    @click="turnOff(cooker)">Off</button>
+                  <button
+                    class="btn btn-info"
+                    v-if="cooker.state === 'READY'"
+                    @click="startCooking(cooker)">Start Cooking</button>
                 </div>
               </div>
             </div>

@@ -1,4 +1,5 @@
 const rpio = require('rpio')
+const commands = require('./commands')
 const config = require('./config')
 const { dateDiff } = require('./helper')
 
@@ -12,24 +13,22 @@ const STATE = {
 }
 
 class Cooker {
-  constructor (name, sensorId, relayId) {
+  constructor (name, sensorId, relayId, cookerId) {
     this.name = name
     this.sensorId = sensorId
     this.relayId = relayId
+    this.cookerId = cookerId
 
     rpio.open(relayId, rpio.OUTPUT, rpio.HIGH)
-    this.reset()
-  }
 
-  reset () {
     const now = new Date()
     this.temperature = null
     this.lastUpdated = now
     this.relayOn = false
-    this.relayStart = now
+    this.relayStart = null
     this.relayDelayed = 0
     this.state = STATE.OFF
-    this.startStart = now
+    this.stateStart = now
     this.events = []
     this.settings = {
       duration: null,
@@ -38,7 +37,7 @@ class Cooker {
   }
 
   turnOn (duration, temperature) {
-    this.reset()
+    this.events = []
     this.settings = { duration, temperature }
     this.nextState(STATE.PREHEATING)
   }
@@ -51,7 +50,19 @@ class Cooker {
     this.nextState(STATE.COOLING)
   }
 
-  update () {
+  async updateTemperature () {
+    try {
+      const { temperature } = await commands.getSensorTemp(this.sensorId)
+      this.temperature = temperature
+    } catch (error) {
+      console.warn('Error getting sensor temperature', error)
+      this.temperature = 213
+    } finally {
+      this.lastUpdated = new Date()
+    }
+  }
+
+  updateState () {
     switch (this.state) {
       case STATE.OFF:
         break
@@ -115,12 +126,14 @@ class Cooker {
       return
     }
 
-    const minCooldown = config.MIN_RELAY_COOLDOWN
-    const currentCooldown = dateDiff(new Date(), this.relayStart)
-    this.relayDelayed = Math.max(0, minCooldown - currentCooldown)
-    if (this.relayDelayed > 0) {
-      console.log(`[Cooker] RELAY:${this.relayId} => Turning on in ${this.relayDelayed}s`)
-      return
+    if (this.relayStart !== null) {
+      const minCooldown = config.MIN_RELAY_COOLDOWN
+      const currentCooldown = dateDiff(new Date(), this.relayStart)
+      this.relayDelayed = Math.max(0, minCooldown - currentCooldown)
+      if (this.relayDelayed > 0) {
+        console.log(`[Cooker] RELAY:${this.relayId} => Turning on in ${this.relayDelayed}s`)
+        return
+      }
     }
 
     rpio.write(this.relayId, rpio.LOW)
@@ -156,11 +169,6 @@ class Cooker {
 
   isAtTemperature () {
     return this.temperature >= this.settings.temperature
-  }
-
-  export () {
-    const clean = { ...this }
-    return clean
   }
 }
 

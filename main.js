@@ -7,6 +7,7 @@ rpio.init({ mapping: 'gpio' })
 
 const api = require('./api')
 const websockets = require('./api/websockets')
+const cookerManager = require('./api/cooker-manager')
 
 const port = process.env.PORT || 4201
 const app = express()
@@ -21,6 +22,9 @@ app.use(express.static('website-dev'))
 // API Routes
 app.use(bodyParser.json())
 app.use('/api', api)
+
+// Setup Modules
+cookerManager.start()
 
 // Start Server
 server.listen(port, () => console.info(`Listening on Port ${port}`))
